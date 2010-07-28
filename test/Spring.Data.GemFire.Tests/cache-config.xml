@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<cache>
+
+  <region name = "root" >
+    <region-attributes scope="local" caching-enabled="true"/>
+    <region name = "exampleRegion" >
+      <region-attributes caching-enabled="true" endpoints="localhost:40404" client-notification="true"/>
+    </region>
+  </region>
+
+</cache>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="sample-apps">
+  <title>Sample Applications</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Spring AMQP project includes two sample applications. The first
+    is a simple "Hello World" example that demonstrates both synchronous and
+    asynchronous message reception. It provides an excellent starting point
+    for acquiring an understanding of the essential components. The second
+    sample is based on a simplified stock-trading use case to demonstrate the
+    types of interaction that would be common in real world applications. In
+    this chapter, we will provide a quick walk-through of each sample so that
+    you can focus on the most important components. The samples are available
+    in the distribution in the main solution file.</para>
+  </section>
+
+  <section>
+    <title>Hello World</title>
+
+    <para>The Hello World sample demonstrates both synchronous and
+    asynchronous message reception.</para>
+
+    <section id="hello-world-sync">
+      <title>Synchronous Example</title>
+
+      <para>Within the HelloWorld solution folder navigate to the
+      Spring.Amqp.HelloWorld.BrokerConfiguration class. Run the "Program.cs"
+      main application there in order to create a new queue declartion named
+      "<literal>hello.world.queue</literal>" on the broker.</para>
+
+      <para>The HelloWorld/Sync solution folder has a project named
+      Spring.Amqp.HelloWorldProducer. The Spring XML configuration for
+      creating the RabbitTemplate instance is shown below</para>
+
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+
+  &lt;object id="ConnectionFactory" type="Spring.Messaging.Amqp.Rabbit.Connection.SingleConnectionFactory, Spring.Messaging.Amqp.Rabbit"&gt;
+    
+  &lt;/object&gt;
+
+  &lt;object id="RabbitTemplate" type="Spring.Messaging.Amqp.Rabbit.Core.RabbitTemplate, Spring.Messaging.Amqp.Rabbit"&gt;
+    &lt;constructor-arg ref="ConnectionFactory"/&gt;
+    &lt;!-- The queue will be bound to the default direct exchange unless specified otherwise --&gt;
+    &lt;property name="Queue" value="hello.world.queue"/&gt;
+    &lt;property name="RoutingKey" value="hello.world.queue"/&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>
+
+      <para> This is identical to the configuration of the Consumer
+      application.</para>
+
+      <para>Looking back at the "rabbitTemplate" object definition
+      configuration, you will see that it has the helloWorldQueue's name set
+      as its "queue" property (for receiving Messages) and for its
+      "routingKey" property (for sending Messages).</para>
+
+      <para>Now that we've explored the configuration, let's look at the code
+      that actually uses these components. First, open the Program.cs file in
+      the Producer project It contains a main() method where the Spring
+      ApplicationContext is created.</para>
+
+      <programlisting language="csharp">        static void Main(string[] args)
+        {
+            using (IApplicationContext ctx = ContextRegistry.GetContext())
+            {
+                IAmqpTemplate amqpTemplate = (IAmqpTemplate) ctx.GetObject("RabbitTemplate");
+                log.Info("Sending hello world message.");
+                amqpTemplate.ConvertAndSend("Hello World");
+                log.Info("Hello world message sent.");                
+            }
+
+            Console.WriteLine("Press 'enter' to exit.");
+            Console.ReadLine();
+        }</programlisting>
+
+      <para>As you can see in the example above, an instance of the
+      IAmqpTemplate interface is retrieved and used for sending a Message.
+      Since the client code should rely on interfaces whenever possible, the
+      type is <interfacename>IAmqpTemplate</interfacename> rather than
+      RabbitTemplate. Even though this is just a simple example, relying on
+      the interface means that this code is more portable (the configuration
+      can be changed independently of the code). Since the ConvertAndSend()
+      method is invoked, the template will be delegating to its
+      IMessageConverter instance. In this case, it's using the default
+      SimpleMessageConverter, but a different implementation could be provided
+      to the "rabbitTemplate" bean as defined in
+      HelloWorldConfiguration.</para>
+
+      <para>Now open the Consumer project. It actually shares the same
+      configuration as the producer project. The Consumer code is basically a
+      mirror image of the Producer, calling ReceiveAndConvert() rather than
+      ConvertAndSend().</para>
+
+      <programlisting language="csharp">        static void Main(string[] args)
+        {
+            using (IApplicationContext ctx = ContextRegistry.GetContext())
+            {
+                IAmqpTemplate amqpTemplate = (IAmqpTemplate)ctx.GetObject("RabbitTemplate");
+                log.Info("Synchronous pull");
+                String message = (String) amqpTemplate.ReceiveAndConvert();
+                if (message == null)
+                {
+                    log.Info("[No message present on queue to receive.]");
+                }
+                else
+                {
+                    log.Info("Received: " + message);
+                }
+            }
+
+            Console.WriteLine("Press 'enter' to exit.");
+            Console.ReadLine();
+        }</programlisting>
+
+      <para>If you run the Producer, and then run the Consumer, you should see
+      the message "Received: Hello World" in the console output.</para>
+    </section>
+
+    <section id="hello-world-async">
+      <title>Asynchronous Example</title>
+
+      <para>Now that we've walked through the synchronous Hello World sample,
+      it's time to move on to a slightly more advanced but significantly more
+      powerful option. With a few modifications, the Hello World sample can
+      provide an example of asynchronous reception, a.k.a.
+      <emphasis>Message-driven POCOs</emphasis>. In fact, there is a proejct
+      that provides exactly that in HelloWorld/Async solution folder.</para>
+
+      <para>Once again, we will start with the sending side. Open the
+      ProducerConfiguration class and notice that it creates a
+      "connectionFactory" and "rabbitTemplate" object definition. Recall that
+      messages are sent to an Exchange rather than being sent directly to a
+      Queue. The AMQP default Exchange is a direct Exchange with no name. All
+      Queues are bound to that default Exchange with their name as the routing
+      key. That is why we only need to provide the routing key here.</para>
+
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+
+  &lt;object id="ConnectionFactory" type="Spring.Messaging.Amqp.Rabbit.Connection.SingleConnectionFactory, Spring.Messaging.Amqp.Rabbit"&gt;
+
+  &lt;/object&gt;
+
+  &lt;object id="RabbitTemplate" type="Spring.Messaging.Amqp.Rabbit.Core.RabbitTemplate, Spring.Messaging.Amqp.Rabbit"&gt;
+    &lt;constructor-arg ref="ConnectionFactory"/&gt;
+    &lt;!-- The queue will be bound to the default direct exchange unless specified otherwise --&gt;
+    &lt;property name="RoutingKey" value="hello.world.queue"/&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;
+</programlisting>
+
+      <para>Since this sample will be demonstrating asynchronous message
+      reception, the producing side is designed to continuously send messages
+      (if it were a message-per-execution model like the synchronous version,
+      it would not be quite so obvious that it is in fact a message-driven
+      consumer).</para>
+
+      <programlisting language="csharp">    class Program
+    {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
+        static void Main(string[] args)
+        {
+            using (IApplicationContext ctx = ContextRegistry.GetContext())
+            {
+                IAmqpTemplate amqpTemplate = (IAmqpTemplate)ctx.GetObject("RabbitTemplate");
+                int i = 0;
+                while (true)
+                {
+                    amqpTemplate.ConvertAndSend("Hello World " + i++);
+                    log.Info("Hello world message sent.");
+                    Thread.Sleep(3000);
+                }
+            }            
+        }
+    }</programlisting>
+
+      <para>Now, let's turn to the receiving side. To emphasize the
+      Message-driven POCO behavior will start with the component that is
+      reacting to the messages. The class is called HelloWorldHandler.</para>
+
+      <programlisting language="csharp">    public class HelloWorldHandler
+    {
+        public void HandleMessage(string text)
+        {
+            Console.WriteLine("Received: " + text);
+        }
+    }
+</programlisting>
+
+      <para>Clearly, that <emphasis>is</emphasis> a POCO. It does not extend
+      any base class, it doesn't implement any interfaces, and it doesn't even
+      contain any imports. It is being "adapted" to the MessageListener
+      interface by the Spring AMQP MessageListenerAdapter. That adapter can
+      then be configured on a SimpleMessageListenerContainer. For this sample,
+      the container is created in the Application.xml configuration file. You
+      can see the POCO declared there.</para>
+
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+
+  &lt;object id="ConnectionFactory" type="Spring.Messaging.Amqp.Rabbit.Connection.SingleConnectionFactory, Spring.Messaging.Amqp.Rabbit"&gt;
+
+  &lt;/object&gt;
+
+  &lt;object id="MessageListenerContainer" type="Spring.Messaging.Amqp.Rabbit.Listener.SimpleMessageListenerContainer, Spring.Messaging.Amqp.Rabbit"&gt;
+    &lt;property name="ConnectionFactory" ref="ConnectionFactory"/&gt;
+    &lt;property name="Queue" value="hello.world.queue"/&gt;
+    &lt;property name="ConcurrentConsumers" value="5"/&gt;
+    &lt;property name="MessageListener" ref="MessageListenerAdapter"/&gt;
+  &lt;/object&gt;
+
+
+  &lt;object id="MessageListenerAdapter" type="Spring.Messaging.Amqp.Rabbit.Listener.Adapter.MessageListenerAdapter, Spring.Messaging.Amqp.Rabbit"&gt;
+    &lt;property name="HandlerObject" ref="HelloWorldHandler"/&gt;
+  &lt;/object&gt;
+
+  &lt;object id="HelloWorldHandler" type="Spring.Amqp.HelloWorld.Consumer.Async.HelloWorldHandler, Spring.Amqp.HelloWorld.Consumer.Async"&gt;
+    
+  &lt;/object&gt;
+
+
+&lt;/objects&gt;</programlisting>
+
+      <para>You can start the Producer and Consumer in any order, and you
+      should see messages being sent and received every 3 seconds.</para>
+
+      <para>To run the application make sure that you select the properties of
+      the top level solution and select "Multiple Startup Project" option.
+      Pick the producer and consumer applications"</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Stock Trading</title>
+
+    <para>TODO</para>
+  </section>
+</chapter>
