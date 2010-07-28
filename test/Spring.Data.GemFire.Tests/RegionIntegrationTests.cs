@@ -99,12 +99,14 @@ namespace Spring.Data.GemFire.Tests
         public void Hello()
         {
             DistributedSystem dsys = DistributedSystem.Connect("exampledstest");
-            Cache cache = CacheFactory.Create("exampledscache", dsys);
+            Cache cache = CacheFactory.Create("exampledscache", dsys);            
+            
             AttributesFactory af = new AttributesFactory();
             af.SetClientNotificationEnabled(true);
             af.SetEndpoints("localhost:40404");
             RegionAttributes rAttrib = af.CreateRegionAttributes();
             Region region = cache.CreateRegion("exampledsregion", rAttrib);
+            
 
             region.RegisterAllKeys();
 
