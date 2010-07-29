@@ -100,6 +100,7 @@ namespace Spring.Data.GemFire
             name = (!StringUtils.HasText(name) ? objectName : name);
             AssertUtils.ArgumentHasText(name, "Name (or ObjectName) property must be set");
 
+            
             //first get cache
             region = cache.GetRegion(name);
             if (region != null)
@@ -133,6 +134,10 @@ namespace Spring.Data.GemFire
 
         protected virtual void RegisterInterests()
         {
+            if (interests == null )
+            {
+                return;
+            }
             foreach (AllKeysInterest interest in interests)
             {
                 if (interest is RegexInterest)

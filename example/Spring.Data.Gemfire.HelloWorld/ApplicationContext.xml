@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object name="Cache" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
+    <property name="properties">
+      <name-values>
+        <add key="log-level" value="warning"/>
+      </name-values>
+    </property>              
+  </object>
+ 
+  
+  <object name="Region" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire">
+    <property name="Endpoints" value="localhost:40404"/>
+    <property name="Cache" ref="Cache"/>
+    <property name="Name" value="exampleregion"/>
+    <property name="ClientNotification" value="true"/>
+    <property name="Interests">
+      <list>
+        <object type="Spring.Data.GemFire.AllKeysInterest, Spring.Data.GemFire"/>
+      </list>
+    </property>
+  </object>
+
+   
+  <object name="CommandProcessor" type="Spring.Data.Gemfire.HelloWorld.CommandProcessor, HelloWorld">
+    <property name="Region" ref="Region"/>
+  </object>
+
+  <object name="HelloWorld" type="Spring.Data.Gemfire.HelloWorld.HelloWorld, HelloWorld">    
+    <property name="CommandProcessor" ref="CommandProcessor"/>
+  </object>
+
+  
+  
+</objects>
