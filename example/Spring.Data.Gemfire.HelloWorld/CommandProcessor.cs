@@ -18,14 +18,17 @@
 
 #endregion
 
+#region
+
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Common.Logging;
 using GemStone.GemFire.Cache;
 using Spring.Util;
+
+#endregion
 
 namespace Spring.Data.Gemfire.HelloWorld
 {
@@ -36,7 +39,7 @@ namespace Spring.Data.Gemfire.HelloWorld
     /// <author>Mark Pollack (.NET)</author>
     public class CommandProcessor
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(CommandProcessor));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (CommandProcessor));
 
         private static string regexString =
             "query|exit|help|size|clear|keys|values|map|containsKey|containsValue|get|remove|put";
@@ -48,8 +51,8 @@ namespace Spring.Data.Gemfire.HelloWorld
         private bool threadActive;
 
         private Thread thread;
-        
-        
+
+
         private Region region;
 
         public Region Region
@@ -58,10 +61,8 @@ namespace Spring.Data.Gemfire.HelloWorld
         }
 
         public string CommandLinePrefix
-        {           
-            set {
-                commandLinePrefix = value;
-            }
+        {
+            set { commandLinePrefix = value; }
         }
 
         private static string InitHelp()
@@ -71,7 +72,8 @@ namespace Spring.Data.Gemfire.HelloWorld
 
         public CommandProcessor()
         {
-            RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
+            RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) |
+                                    RegexOptions.IgnoreCase);
             regex = new Regex(regexString, options);
         }
 
@@ -80,8 +82,9 @@ namespace Spring.Data.Gemfire.HelloWorld
 
         public void Start()
         {
-            LOG.Info("Distributed System " + region.Cache.DistributedSystem.Name + " connecting to region [" + region.Name + "]");
-            
+            LOG.Info("Distributed System " + region.Cache.DistributedSystem.Name + " connecting to region [" +
+                     region.Name + "]");
+
             if (thread == null)
             {
                 threadActive = true;
@@ -92,7 +95,8 @@ namespace Spring.Data.Gemfire.HelloWorld
 
         public void Stop()
         {
-            LOG.Info("Distributed System " + region.Cache.DistributedSystem.Name + " disconnecting from region [" + region.Name + "]");            
+            LOG.Info("Distributed System " + region.Cache.DistributedSystem.Name + " disconnecting from region [" +
+                     region.Name + "]");
             threadActive = false;
             thread.Join(3*100);
         }
@@ -116,14 +120,16 @@ namespace Spring.Data.Gemfire.HelloWorld
                     try
                     {
                         Console.WriteLine(Process(expr));
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         LOG.Error("Error executing last command", e);
                     }
                     Console.Write(commandLinePrefix + ">");
                     Console.Out.Flush();
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 LOG.Error("Caught exception while processing commands.", ex);
             }
@@ -139,13 +145,31 @@ namespace Spring.Data.Gemfire.HelloWorld
                 string arg1 = (args.Length >= 2 ? args[1] : null);
                 string arg2 = (args.Length == 3 ? args[2] : null);
 
+                if (IsMatch("query", command))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("[");
+                    string query = expr.Trim().Substring(command.Length);
+                    ISelectResults resultSet = region.Query(query);
+
+
+                    for (uint i = 0; i < resultSet.Size; i++)
+                    {
+                        sb.Append(resultSet[i].ToString());
+                        if (i != resultSet.Size - 1) sb.Append(",");
+                    }
+                    sb.Append("]");
+                    return sb.ToString();                   
+                    
+                }
+
                 // parse commands w/o arguments
                 if (IsMatch("exit", command))
                 {
                     threadActive = false;
                     return "Node exiting...";
                 }
-                if (IsMatch("help",command))
+                if (IsMatch("help", command))
                 {
                     return help;
                 }
@@ -166,11 +190,10 @@ namespace Spring.Data.Gemfire.HelloWorld
                     for (int i = 0; i < keys.Length; i++)
                     {
                         sb.Append(keys[i]);
-                        if (i != keys.Length-1) sb.Append(",");
+                        if (i != keys.Length - 1) sb.Append(",");
                     }
                     sb.Append("]");
                     return sb.ToString();
-                    
                 }
                 if (IsMatch("values", command))
                 {
@@ -215,7 +238,11 @@ namespace Spring.Data.Gemfire.HelloWorld
                 if (IsMatch("get", command))
                 {
                     IGFSerializable cValue = region.Get(arg1);
-                    return cValue.ToString();                    
+                    return cValue.ToString();
+                }
+                if (IsMatch("remove", command))
+                {
+                    return "not yet implemented";
                 }
 
                 // commands w/ 2 args
@@ -223,16 +250,15 @@ namespace Spring.Data.Gemfire.HelloWorld
                 {
                     IGFSerializable oldValue = region.Get(arg1);
                     region.Put(arg1, arg2);
-                    if (oldValue == null )
+                    if (oldValue == null)
                     {
                         return "null";
                     }
-                    return oldValue.ToString();
-                    
+                    return "old value = [" + oldValue.ToString() + "]";
                 }
-                return "unknown command - run 'help' for available commands";
+                return "unknown command [" + command + "] - type 'help' for available commands";
             }
-            return "unknown command - run 'help' for available commands";
+            return "unknown command [" + expr + "] -  type 'help' for available commands";
         }
 
         private bool IsMatch(string command, string userText)
@@ -246,5 +272,4 @@ namespace Spring.Data.Gemfire.HelloWorld
             thread.Join();
         }
     }
-
 }

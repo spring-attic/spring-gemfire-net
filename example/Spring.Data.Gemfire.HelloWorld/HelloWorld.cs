@@ -18,11 +18,14 @@
 
 #endregion
 
+#region
+
 using System;
-using System.Threading;
 using Common.Logging;
 using GemStone.GemFire.Cache;
 using Spring.Objects.Factory;
+
+#endregion
 
 namespace Spring.Data.Gemfire.HelloWorld
 {
@@ -31,20 +34,15 @@ namespace Spring.Data.Gemfire.HelloWorld
     /// </summary>
     /// <author>Costin Leau</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class HelloWorld : IInitializingObject , IDisposable
+    public class HelloWorld : IDisposable
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(HelloWorld));
+        private static readonly ILog log = LogManager.GetLogger(typeof (HelloWorld));
 
-        private CommandProcessor processor; 
-        
+        private CommandProcessor processor;
+
         public CommandProcessor CommandProcessor
         {
             set { processor = value; }
-        }
-
-        public void AfterPropertiesSet()
-        {
-            processor.Start();
         }
 
 
@@ -61,12 +59,13 @@ namespace Spring.Data.Gemfire.HelloWorld
                 {
                     processor.CommandLinePrefix = args[0];
                 }
+                processor.Start();
                 processor.AwaitCommands();
-            } catch  (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new IllegalStateException("Cannot greet world", ex);
             }
         }
     }
-
 }

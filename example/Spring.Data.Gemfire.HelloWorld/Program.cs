@@ -1,13 +1,16 @@
-﻿using System;
-using GemStone.GemFire.Cache;
+﻿#region
+
+using System;
 using Spring.Context;
 using Spring.Context.Support;
 
+#endregion
+
 namespace Spring.Data.Gemfire.HelloWorld
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {

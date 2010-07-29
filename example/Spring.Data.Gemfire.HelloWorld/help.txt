@@ -9,6 +9,7 @@ keys - returns the keys contained by the grid
 values - returns the values contained by the grid
 containsKey <key> - indicates if the given key is contained by the grid
 containsValue <value> - indicates if the given value is contained by the grid
+map - returns a list of the key-value pairs in the grid
 
 query <query> - executes a query on the grid
 
