@@ -7,7 +7,13 @@ Release Version 1.0.0 M1 August 3, 2010
 Release Notes - Spring Gemfire for .NET - Version 1.0.0 M1
 
 New Feature
-    IoC configuration of Cache, Regions, and associated CacheLoaders, CacheListener, and CacheWriters
+[SGFNET-1] - IoC configuration of Cache, Regions, and associated CacheLoaders, CacheListener, and CacheWriters 
+[SGFNET-2] - Create sample application 
+[SGFNET-4] - Exception translation into Spring's DAO exception hierarchy for use with PersistenceExceptionTranslationPostProcessor 
+
+Task
+[SGFNET-3] - Create reference documentation 
+
 
 
 

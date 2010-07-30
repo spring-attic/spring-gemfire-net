@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book  [
   <!ENTITY preface              SYSTEM "preface.xml">
-  <!ENTITY quick-tour           SYSTEM "quick-tour.xml">
-  <!ENTITY amqp                 SYSTEM "amqp.xml">
-  <!ENTITY erlang               SYSTEM "erlang.xml">
-  <!ENTITY sample-apps          SYSTEM "sample-apps.xml">
-  <!ENTITY further-reading      SYSTEM "further-reading.xml">
-  <!ENTITY bibliography         SYSTEM "bibliography.xml">
+  <!ENTITY bootstrap            SYSTEM "bootstap.xml">
+  <!ENTITY data                 SYSTEM "data.xml">
+  <!ENTITY samples              SYSTEM "samples.xml">
+  <!ENTITY links                SYSTEM "links.xml">
 ]>
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -15,21 +13,19 @@
       xml:lang="en">
 
     <bookinfo>
-        <title>Spring AMQP - Reference Documentation</title>
+        <title>Spring Gemfire for .NET - Reference Documentation</title>
         <releaseinfo>1.0.0 M1</releaseinfo>
 
         <authorgroup>
+	  <author>
+            <firstname>Costin</firstname>
+            <surname>Leau</surname>
+            <affiliation>SpringSource, a division of VMware</affiliation>
+	  </author>
             <author>
                 <firstname>Mark</firstname>
                 <surname>Pollack</surname>
-            </author>
-            <author>
-                <firstname>Mark</firstname>
-                <surname>Fisher</surname>
-            </author>
-            <author>
-                <firstname>Oleg</firstname>
-                <surname>Zhurakousky</surname>
+		<affiliation>SpringSource, a division of VMware</affiliation>
             </author>
         </authorgroup>
 
@@ -48,39 +44,51 @@
     &preface;
     <part>
         <title>Introduction</title>
-        <partintro>
-            <para>
-                This first part of the reference documentation
-                <link linkend="what-is-spring-amqp">is an overview</link> of
-                Spring AMQP and the underlying concepts.
-            </para>
-        </partintro>
+	<partintro>
+	  <para>
+	    <para>This document is the reference guide for Spring GemFire project (SGF). It explains the relationship between Spring framework and GemFire Enterprise Fabric (GEF) 6.0.x, defines the basic concepts and semantics of the integration  and how these can be used effectively.
+	    </para>
+	  </para>
+	</partintro>
     </part>
     <part>
-        <title>Reference</title>
-        <partintro>
-            <para>
-                This part of the reference documentation details the various components
-                that comprise Spring AMQP. The <link linkend="amqp">main chapter</link>
-		covers the core classes to develop an AMQP application.  It part also
-		includes a chapter on <link lnkend="erlang">integration with
-		Erlang</link> and a chapter 
-		about the <link linkend="sample-apps">sample applications</link>.
-            </para>
-        </partintro>
-	&amqp;
-	&erlang;
-	&sample-apps;
+        <title>Reference Documentation</title>
+<partintro>
+   <title>Document structure</title>
+
+   <para>This part of the reference documentation explains the core functionality
+   offered by Spring GemFire integration.</para>
+
+   <para><xref linkend="bootstrap"/> describes the configuration support provided for
+   bootstrapping, initializing and accessing a GemFire cache or region.</para>
+   
+   <para><xref linkend="apis"/> explains the integration between GemFire API and
+   the various "data" features available in Spring, such as transaction management
+   and exception translation.
+   </para>
+
+   <para><xref linkend="samples"/> describes the samples provided with the distribution
+   for showcasing the various features available in Spring GemFire.
+   </para>
+
+   <!-- 
+   <para><xref linkend="testing"/> showcases various ways of testing GemFire inside
+   Spring framework.</para>
+ 	-->
+</partintro>
+	&bootstrap;
+	&data;
+	&samples;
     </part>
     <part id="resources">
         <title>Other Resources</title>
-        <partintro>
-            <para>
-                In addition to this reference documentation, there exist a number of
-                other resources that may help you learn about AMQP.
-            </para>
-        </partintro>
-	&further-reading;
-	&bibliography;
+      <partintro>
+          <para>
+              In addition to this reference documentation, there are a number of
+              other resources that may help you learn how to use GemFire and Spring framework. 
+              These additional, third-party resources are enumerated in this section.
+          </para>
+      </partintro>
+	&links;
     </part>
 </book>
