@@ -18,9 +18,10 @@
 
 #endregion
 
+#region
+
 using System;
 using System.Collections.Specialized;
-using System.Threading;
 using Common.Logging;
 using GemStone.GemFire.Cache;
 using Spring.Dao;
@@ -29,20 +30,21 @@ using Spring.Objects.Factory;
 using Spring.Util;
 using Properties=GemStone.GemFire.Cache.Properties;
 
+#endregion
+
 namespace Spring.Data.GemFire
 {
     /// <summary>
     /// Factory used for configuring a Gemfire Cache manager. Allows either retrieval of an existing, opened cache 
     /// or the creation of a new one.
     /// </summary>
-    /// <remarks>
-    /// 
-    /// </remarks>
     /// <author>Mark Pollack</author>
-    public class CacheFactoryObject : IObjectNameAware, IObjectFactoryAware, IDisposable, IInitializingObject, IFactoryObject, IPersistenceExceptionTranslator
+    public class CacheFactoryObject : IDisposable, IInitializingObject,
+                                      IFactoryObject, IPersistenceExceptionTranslator
     {
+        #region Fields
 
-        protected static readonly ILog log = LogManager.GetLogger(typeof(CacheFactoryObject));
+        protected static readonly ILog log = LogManager.GetLogger(typeof (CacheFactoryObject));
 
         private static readonly string DEFAULT_DISTRIBUTED_SYSTEM_NAME = "DistributedSystemDotNet";
 
@@ -57,31 +59,50 @@ namespace Spring.Data.GemFire
         private NameValueCollection properties;
         private string cacheXml;
 
-        private string objectName;
-        private IObjectFactory objectFactory;
+        #endregion
 
+        #region Properties
 
+        /// <summary>
+        /// Sets the name of the distributed system.
+        /// </summary>
+        /// <value>The name of the distributed system.</value>
         public string DistributedSystemName
-        {          
+        {
             set { distributedSystemName = value; }
         }
 
+        /// <summary>
+        /// Sets the properties used to configure the Gemfire Cache. These are copied into 
+        /// a GemStone.GemFire.Cache.Properties object and used to initialize the DistributedSystem.
+        /// </summary>
+        /// <value>The properties used to configure the cache..</value>
         public NameValueCollection Properties
         {
             set { properties = value; }
         }
 
+        /// <summary>
+        /// Sets the name of the cache XML that can be used to configure the cache.
+        /// </summary>
+        /// <value>The cache XML.</value>
         public string CacheXml
         {
             set { cacheXml = value; }
         }
 
+        #endregion
+
+        /// <summary>
+        /// Initialization callback called by Spring.  Responsible for connecting to the distributed system
+        /// and creating the cache.
+        /// </summary>
         public void AfterPropertiesSet()
         {
             AssertUtils.ArgumentNotNull("name", name, "Cache name can not be null");
             Properties gemfirePropertes = MergePropertes();
             system = DistributedSystem.Connect(distributedSystemName, gemfirePropertes);
-            
+
             log.Info("Connected to Distributed System [" + system.Name + "]");
 
             // first look for open caches
@@ -90,15 +111,17 @@ namespace Spring.Data.GemFire
             {
                 cache = CacheFactory.GetInstance(system);
                 msg = "Retrieved existing";
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 if (cacheXml == null)
                 {
                     cache = CacheFactory.Create(name, system);
-                } else
+                }
+                else
                 {
                     //TODO call Create method that takes CacheAttributes
-                    cache = CacheFactory.Create(name, system, cacheXml);                    
+                    cache = CacheFactory.Create(name, system, cacheXml);
                     log.Debug("Initialized cache from " + cacheXml);
                 }
                 //TODO call Create method that takes CacheAttributes
@@ -109,7 +132,6 @@ namespace Spring.Data.GemFire
 
         private Properties MergePropertes()
         {
-            
             GemStone.GemFire.Cache.Properties gemfirePropertes = GemStone.GemFire.Cache.Properties.Create();
             if (properties != null)
             {
@@ -125,16 +147,18 @@ namespace Spring.Data.GemFire
             if (StringUtils.HasText(name))
             {
                 gemfirePropertes.Insert("name", name.Trim());
-            } 
+            }
             return gemfirePropertes;
         }
 
+        /// <summary>
+        /// Closes the cache and disconnects from the distributed system.
+        /// </summary>
         public void Dispose()
         {
-            
             if (cache != null && !cache.IsClosed)
             {
-                cache.Close();                
+                cache.Close();
             }
             cache = null;
             /* TODO not working on my machine, call hangs
@@ -146,39 +170,68 @@ namespace Spring.Data.GemFire
             system = null;*/
         }
 
+        /// <summary>
+        /// Translate the given exception thrown by a persistence framework to a
+        /// corresponding exception from Spring's generic DataAccessException hierarchy,
+        /// if possible.
+        /// </summary>
+        /// <param name="ex">The exception thrown.</param>
+        /// <returns>
+        /// the corresponding DataAccessException (or <code>null</code> if the
+        /// exception could not be translated, as in this case it may result from
+        /// user code rather than an actual persistence problem)
+        /// </returns>
+        /// <remarks>
+        /// 	<para>
+        /// Do not translate exceptions that are not understand by this translator:
+        /// for example, if coming from another persistence framework, or resulting
+        /// from user code and unrelated to persistence.
+        /// </para>
+        /// 	<para>
+        /// Of particular importance is the correct translation to <see cref="T:Spring.Dao.DataIntegrityViolationException"/>
+        /// for example on constraint violation.  Implementations may use Spring ADO.NET Framework's
+        /// sophisticated exception translation to provide further information in the event of SQLException as a root cause.
+        /// </para>
+        /// </remarks>
+        /// <seealso cref="T:Spring.Dao.DataIntegrityViolationException"/>
+        /// <seealso cref="T:Spring.Data.Support.ErrorCodeExceptionTranslator"/>
+        /// <author>Rod Johnson</author>
+        /// <author>Juergen Hoeller</author>
+        /// <author>Mark Pollack (.NET)</author>
         public DataAccessException TranslateExceptionIfPossible(Exception ex)
         {
             if (ex is GemFireException)
             {
                 return GemFireCacheUtils.ConvertGemFireAccessException((GemFireException) ex);
             }
-            log.Info("Could not translate exception of type " +  ex.GetType());
+            log.Info("Could not translate exception of type " + ex.GetType());
             return null;
         }
 
+        /// <summary>
+        /// Returns the cache object
+        /// </summary>
+        /// <returns>The cache object</returns>
         public object GetObject()
         {
-            return cache;                    
+            return cache;
         }
 
+        /// <summary>
+        /// Returns Gemstone.GemFire.Cache.Cache 
+        /// </summary>
         public Type ObjectType
         {
             get { return typeof (Cache); }
         }
 
+        /// <summary>
+        /// Returns true
+        /// </summary>
         public bool IsSingleton
         {
             get { return true; }
         }
 
-        public string ObjectName
-        {
-            set { this.objectName = value; }
-        }
-
-        public IObjectFactory ObjectFactory
-        {
-            set { this.objectFactory = value; }
-        }
     }
 }

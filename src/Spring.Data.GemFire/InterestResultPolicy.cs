@@ -26,8 +26,19 @@ namespace Spring.Data.GemFire
     /// <author>Mark Pollack</author>
     public enum InterestResultPolicy
     {
-        None,
+
+        /// <summary>
+        /// The client receives a bulk load of all available keys and values matching the interest registration criteria. This is the default interest result policy. 
+        /// </summary>
+        KeysAndValues,
+        /// <summary>
+        /// The client receives a bulk load of all available keys matching the interest registration criteria.
+        /// </summary>
         Keys,
-        KeysAndValues
+        /// <summary>
+        /// The client does not receive any immediate bulk loading. 
+        /// </summary>
+        None
+
     }
 }

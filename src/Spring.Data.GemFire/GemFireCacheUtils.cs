@@ -18,18 +18,27 @@
 
 #endregion
 
-using System;
+#region
+
 using GemStone.GemFire.Cache;
 using Spring.Dao;
+
+#endregion
 
 namespace Spring.Data.GemFire
 {
     /// <summary>
-    ///  
+    /// Helper class featuring methods for GemFire Cache or Region handling. 
     /// </summary>
-    /// <author>Mark Pollack</author>
+    /// <author>Costin Leau</author>
+    /// <author>Mark Pollack (.NET))</author>
     public abstract class GemFireCacheUtils
     {
+        /// <summary>
+        /// Converts the GemFireException into an appropriate one from the Spring.Data.Dao hierarchy.
+        /// </summary>
+        /// <param name="ex">The GemFire exception.</param>
+        /// <returns>A Spring DataAccessException</returns>
         public static DataAccessException ConvertGemFireAccessException(GemFireException ex)
         {
             if (ex is CacheExistsException)
@@ -72,7 +81,7 @@ namespace Spring.Data.GemFire
             {
                 return new InvalidDataAccessResourceUsageException(ex.Message, ex);
             }
-            if (ex is EntryNotFoundException) 
+            if (ex is EntryNotFoundException)
             {
                 return new DataRetrievalFailureException(ex.Message, ex);
             }
@@ -80,7 +89,7 @@ namespace Spring.Data.GemFire
             {
                 return new InvalidDataAccessApiUsageException(ex.Message, ex);
             }
-           
+
             if (ex is CacheExistsException)
             {
                 return new DataIntegrityViolationException(ex.Message, ex);
@@ -96,5 +105,4 @@ namespace Spring.Data.GemFire
             return new GemFireSystemException(ex);
         }
     }
-
 }

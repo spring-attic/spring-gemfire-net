@@ -18,10 +18,14 @@
 
 #endregion
 
+#region
+
 using System;
 using System.Runtime.Serialization;
 using GemStone.GemFire.Cache;
 using Spring.Dao;
+
+#endregion
 
 namespace Spring.Data.GemFire
 {
@@ -34,18 +38,19 @@ namespace Spring.Data.GemFire
     public class GemFireSystemException : UncategorizedDataAccessException
     {
         #region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GemFireSystemException"/> class.
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GemFireSystemException"/> class.
         /// </summary>
-		public GemFireSystemException()
-		{
-		}
+        public GemFireSystemException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GemFireSystemException"/> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        public GemFireSystemException(string message): base(message)
+        public GemFireSystemException(string message) : base(message)
         {
         }
 
@@ -69,7 +74,6 @@ namespace Spring.Data.GemFire
         /// <param name="cause">The cause.</param>
         public GemFireSystemException(GemFireException cause) : base(cause != null ? cause.Message : null, cause)
         {
-            
         }
 
         /// <summary>
@@ -84,10 +88,10 @@ namespace Spring.Data.GemFire
         /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
         /// that contains contextual information about the source or destination.
         /// </param>
-        protected GemFireSystemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
-
+        protected GemFireSystemException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
 
         #endregion
     }
-
 }

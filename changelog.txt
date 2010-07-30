@@ -1,18 +1,14 @@
-SPRING AMQP .NET CHANGELOG
-==================================
-http://springsource.org/spring-amqp
+SPRING GEMFIRE FOR .NET CHANGELOG
+=================================
+http://springsource.org/spring-gemfire
 
-Release Version 1.0.0 M1 July 15, 2010
+Release Version 1.0.0 M1 August 3, 2010
 
-Release Notes - Spring AMQP .NET - Version 1.0.0 M1
+Release Notes - Spring Gemfire for .NET - Version 1.0.0 M1
 
 New Feature
-    AMQP domain abstractions
-    Erlang Helper library
-    Rabbit Connection Factory
-    RabbitTemplate 
-    MessageListenerContainer
-    Rabbit Broker Administration
+    IoC configuration of Cache, Regions, and associated CacheLoaders, CacheListener, and CacheWriters
+
 
 
 

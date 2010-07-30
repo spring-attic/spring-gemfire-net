@@ -18,10 +18,13 @@
 
 #endregion
 
-using System;
+#region
+
 using GemStone.GemFire.Cache;
 using Spring.Objects.Factory;
 using Spring.Util;
+
+#endregion
 
 namespace Spring.Data.GemFire
 {
@@ -34,27 +37,62 @@ namespace Spring.Data.GemFire
     {
         private ICacheableKey[] keys;
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyInterest"/> class.
+        /// </summary>
         public KeyInterest()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyInterest"/> class.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
         public KeyInterest(ICacheableKey[] keys)
             : this(keys, InterestResultPolicy.KeysAndValues, false)
         {
-            
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyInterest"/> class.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <param name="durable">if set to <c>true</c> register durable interest.</param>
+        /// <remarks>
+        /// The client can register any of its interest lists and continuous queries as durable. 
+        /// Durable interest remains even if the client disconnects for a period of time. 
+        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// when the client reconnects, plays them back to the client.
+        /// </remarks>
         public KeyInterest(ICacheableKey[] keys, bool durable)
             : this(keys, InterestResultPolicy.KeysAndValues, durable)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyInterest"/> class.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <param name="policy">The policy.</param>
         public KeyInterest(ICacheableKey[] keys, InterestResultPolicy policy)
             : this(keys, policy, false)
         {
-            
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyInterest"/> class.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <param name="policy">The policy.</param>
+        /// <param name="durable">if set to <c>true</c> register durable interest.</param>
+        /// <remarks>
+        /// The client can register any of its interest lists and continuous queries as durable. 
+        /// Durable interest remains even if the client disconnects for a period of time. 
+        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// when the client reconnects, plays them back to the client.
+        /// </remarks>
         public KeyInterest(ICacheableKey[] keys, InterestResultPolicy policy, bool durable)
         {
             this.keys = keys;
@@ -62,12 +100,24 @@ namespace Spring.Data.GemFire
             this.durable = durable;
         }
 
+        #endregion
+
+        /// <summary>
+        /// Gets or sets the keys.
+        /// </summary>
+        /// <value>The keys.</value>
         public ICacheableKey[] Keys
         {
             get { return keys; }
             set { keys = value; }
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return string.Format("Keys: {0}, Policy: {1}, Durable: {2}", keys, policy, durable);
@@ -78,5 +128,4 @@ namespace Spring.Data.GemFire
             AssertUtils.ArgumentNotNull(keys, "a non-null keys is required.");
         }
     }
-
 }

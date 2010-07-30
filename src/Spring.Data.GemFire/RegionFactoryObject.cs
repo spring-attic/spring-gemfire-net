@@ -69,7 +69,7 @@ namespace Spring.Data.GemFire
 
         // Distribution
         // For client caches the ScopeType should only be used when you want a local scope.
-        private bool localScope = false;        
+        private bool localScope;
 
         // storage;
         private int? initialCapacity;
@@ -79,10 +79,10 @@ namespace Spring.Data.GemFire
 
 
         //Misc settings
-        private bool? cachingEnabled = null;
-        private bool? clientNotificationEnabled = null;
+        private bool? cachingEnabled;
+        private bool? clientNotificationEnabled;
         private string endpoints;
-        private uint? lruEntriesLimit = null;
+        private uint? lruEntriesLimit;
         private string poolName;
 
         //Interests
@@ -90,7 +90,6 @@ namespace Spring.Data.GemFire
 
         private RegionAttributes attributes;
         private Region region;
-
 
         #endregion
 
@@ -100,7 +99,7 @@ namespace Spring.Data.GemFire
             name = (!StringUtils.HasText(name) ? objectName : name);
             AssertUtils.ArgumentHasText(name, "Name (or ObjectName) property must be set");
 
-            
+
             //first get cache
             region = cache.GetRegion(name);
             if (region != null)
@@ -113,28 +112,29 @@ namespace Spring.Data.GemFire
                 AttributesFactory attributesFactory = (attributes != null
                                                            ? new AttributesFactory(attributes)
                                                            : new AttributesFactory());
-                
+
                 if (cachingEnabled != null) attributesFactory.SetCachingEnabled(cachingEnabled.Value);
-                if (clientNotificationEnabled != null) attributesFactory.SetClientNotificationEnabled(clientNotificationEnabled.Value);
+                if (clientNotificationEnabled != null)
+                    attributesFactory.SetClientNotificationEnabled(clientNotificationEnabled.Value);
                 if (endpoints != null) attributesFactory.SetEndpoints(endpoints);
                 if (lruEntriesLimit != null) attributesFactory.SetLruEntriesLimit(lruEntriesLimit.Value);
                 if (poolName != null) attributesFactory.SetPoolName(poolName);
-                
+
                 SetCallbacks(attributesFactory);
                 SetDistributionProperties(attributesFactory);
                 SetStorageProperties(attributesFactory);
                 SetExpirationProperties(attributesFactory);
                 PostProcessAttributes(attributesFactory);
-                region = cache.CreateRegion(name, attributesFactory.CreateRegionAttributes());                
+                region = cache.CreateRegion(name, attributesFactory.CreateRegionAttributes());
                 log.Info("Created new cache region [" + name + "]");
                 RegisterInterests();
-            }            
+            }
             PostProcess(region);
         }
 
         protected virtual void RegisterInterests()
         {
-            if (interests == null )
+            if (interests == null)
             {
                 return;
             }
@@ -150,32 +150,35 @@ namespace Spring.Data.GemFire
                     else if (interest.Policy == InterestResultPolicy.Keys)
                     {
                         region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>());
-                    } 
+                    }
                     else if (interest.Policy == InterestResultPolicy.KeysAndValues)
                     {
-                        //TODO should the list of keys be made accessible to client code, post an application context event?
+                        //TODO how to make the list of keys be made accessible to client code, post an application context event?
                         region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>(), true);
-                    }                    
-                } else if (interest is KeyInterest)
+                    }
+                }
+                else if (interest is KeyInterest)
                 {
                     KeyInterest keyInterest = (KeyInterest) interest;
                     if (keyInterest.Policy == InterestResultPolicy.None)
                     {
                         region.RegisterKeys(keyInterest.Keys);
-                    } else if (interest.Policy == InterestResultPolicy.Keys)
+                    }
+                    else if (interest.Policy == InterestResultPolicy.Keys)
                     {
                         region.RegisterKeys(keyInterest.Keys, keyInterest.Durable, false);
-                    } else if (interest.Policy == InterestResultPolicy.KeysAndValues)
+                    }
+                    else if (interest.Policy == InterestResultPolicy.KeysAndValues)
                     {
                         region.RegisterKeys(keyInterest.Keys, keyInterest.Durable, true);
                     }
-                } else
+                }
+                else
                 {
-                    if  (interest.Policy == InterestResultPolicy.None)
+                    if (interest.Policy == InterestResultPolicy.None)
                     {
                         region.RegisterAllKeys(interest.Durable);
-
-                    } 
+                    }
                     else if (interest.Policy == InterestResultPolicy.Keys)
                     {
                         region.RegisterAllKeys(interest.Durable, new List<ICacheableKey>(), false);
@@ -276,20 +279,21 @@ namespace Spring.Data.GemFire
                         if (interest is RegexInterest)
                         {
                             RegexInterest regexInterest = (RegexInterest) interest;
-                            region.UnregisterRegex(regexInterest.Regex);                            
+                            region.UnregisterRegex(regexInterest.Regex);
                         }
                         else if (interest is KeyInterest)
                         {
                             KeyInterest keyInterest = (KeyInterest) interest;
                             region.UnregisterKeys(keyInterest.Keys);
-                            
-                        } else
+                        }
+                        else
                         {
                             region.UnregisterAllKeys();
                         }
                     }
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 log.Warn("Cannot unregister cache interests", ex);
             }

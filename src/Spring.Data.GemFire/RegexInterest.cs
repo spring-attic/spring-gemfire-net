@@ -18,9 +18,12 @@
 
 #endregion
 
-using System;
+#region
+
 using Spring.Objects.Factory;
 using Spring.Util;
+
+#endregion
 
 namespace Spring.Data.GemFire
 {
@@ -31,30 +34,62 @@ namespace Spring.Data.GemFire
     /// <author>Mark Pollack (.NET)</author>
     public class RegexInterest : AllKeysInterest, IInitializingObject
     {
-
         private string regex;
-    
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegexInterest"/> class.
+        /// </summary>
         public RegexInterest()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegexInterest"/> class.
+        /// </summary>
+        /// <param name="regex">The regex.</param>
         public RegexInterest(string regex)
             : this(regex, InterestResultPolicy.KeysAndValues, false)
         {
-            
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegexInterest"/> class.
+        /// </summary>
+        /// <param name="regex">The regex.</param>
+        /// <param name="durable">if set to <c>true</c> register durable interest.</param>
+        /// <remarks>
+        /// The client can register any of its interest lists and continuous queries as durable. 
+        /// Durable interest remains even if the client disconnects for a period of time. 
+        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// when the client reconnects, plays them back to the client.
+        /// </remarks>
         public RegexInterest(string regex, bool durable)
             : this(regex, InterestResultPolicy.KeysAndValues, durable)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegexInterest"/> class.
+        /// </summary>
+        /// <param name="regex">The regex.</param>
+        /// <param name="policy">The policy.</param>
         public RegexInterest(string regex, InterestResultPolicy policy)
             : this(regex, policy, false)
         {
-            
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegexInterest"/> class.
+        /// </summary>
+        /// <param name="regex">The regex.</param>
+        /// <param name="policy">The policy.</param>
+        /// <param name="durable">if set to <c>true</c> register durable interest.</param>
+        /// <remarks>
+        /// The client can register any of its interest lists and continuous queries as durable. 
+        /// Durable interest remains even if the client disconnects for a period of time. 
+        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// when the client reconnects, plays them back to the client.
+        /// </remarks>
         public RegexInterest(string regex, InterestResultPolicy policy, bool durable)
         {
             this.regex = regex;
@@ -69,19 +104,26 @@ namespace Spring.Data.GemFire
         public string Regex
         {
             get { return regex; }
-            set { this.regex = value;}
+            set { regex = value; }
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return string.Format("Regex: {0}, Policy: {1}, Durable: {2}", regex, policy, durable);
         }
 
+        /// <summary>
+        /// Ensures the regex property has been set.
+        /// </summary>
         public void AfterPropertiesSet()
         {
             AssertUtils.ArgumentHasText(regex, "A non-empty regex is required");
         }
-
     }
-
 }

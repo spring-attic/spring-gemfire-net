@@ -26,15 +26,22 @@ namespace Spring.Data.GemFire
     /// <author>Mark Pollack</author>
     public interface IInterest
     {
-        InterestResultPolicy Policy
-        {
-            get; set;
-        }
+        /// <summary>
+        /// Gets or sets the policy.
+        /// </summary>
+        /// <value>The policy.</value>
+        InterestResultPolicy Policy { get; set; }
 
-        bool Durable
-        {
-            get; set;
-        }
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="AllKeysInterest"/> is durable.
+        /// </summary>
+        /// <value><c>true</c> if durable; otherwise, <c>false</c>.</value>
+        /// <remarks>
+        /// The client can register any of its interest lists and continuous queries as durable. 
+        /// Durable interest remains even if the client disconnects for a period of time. 
+        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// when the client reconnects, plays them back to the client.
+        /// </remarks>
+        bool Durable { get; set; }
     }
-
 }
