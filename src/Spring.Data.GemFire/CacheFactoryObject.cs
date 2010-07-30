@@ -127,7 +127,8 @@ namespace Spring.Data.GemFire
                 //TODO call Create method that takes CacheAttributes
                 msg = "Created";
             }
-            log.Info(msg + " GemFire Cache ['" + cache.Name + "'] v. " + CacheFactory.Version);
+            
+            log.Info(msg + " GemFire v." + CacheFactory.Version + " Cache ['" + cache.Name + "']");
         }
 
         private Properties MergePropertes()

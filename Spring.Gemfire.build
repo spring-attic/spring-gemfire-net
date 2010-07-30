@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Amqp" default="test">
+<project name="Spring.Data.Gemfire" default="test">
 
     <property name="root.dir" value="${project::get-base-directory()}" overwrite="false" />
     <property name="deploy.dir" value="${root.dir}/../deploy" />
@@ -62,7 +62,7 @@
           <attribute type="AllowPartiallyTrustedCallersAttribute" asis="true"/>
           <!-- attribute type="SecurityTransparentAttribute" asis="true"/ -->
           <attribute type="SecurityPermissionAttribute" value="SecurityAction.RequestMinimum" asis="true"/>
-          <attribute type="AssemblyCompanyAttribute" value="http://springsource.org/spring-amqp/" />
+          <attribute type="AssemblyCompanyAttribute" value="http://springsource.org/spring-gemfire/" />
           <attribute type="AssemblyCopyrightAttribute" value="Copyright 2010 SpringSource." />
           <attribute type="AssemblyTrademarkAttribute" value="Apache License, Version 2.0" />
           <attribute type="AssemblyCultureAttribute" value="" />
@@ -110,7 +110,7 @@
 
 
   <target name="package-zip" depends="package" description="Build Package distribution as .zip file">
-    <property name="project.zip-path" value="${package.dir}/Common.Logging-${project.version}.zip"/>
+    <property name="project.zip-path" value="${package.dir}/Spring.Data.GemFire-${project.version}.zip"/>
     <zip zipfile="${project.zip-path}">
       <fileset basedir="${package.dir}">
         <include name="**/*"/>
@@ -159,8 +159,7 @@
       <echo message="hello ${package.dir}/bin/net/2.0/debug"/>
       <copy todir="${package.dir}/bin/net/2.0/debug" flatten="true" verbose="true">
         <fileset>
-          <include name="src/Spring.Messaging.Amqp.*/**/Debug/Spring.Messaging.Amqp*.???"/>
-          <include name="src/Spring.Erlang/bin/Debug/Spring.Erlang.???"/>
+          <include name="src/Spring.Data.GemFire/**/Debug/Spring.Messaging.Amqp*.???"/>
           <exclude name="**/*Test*"/>
           <exclude name="**/*FileListAbsolute*"/>
         </fileset>
@@ -171,7 +170,7 @@
     <!-- Copy global solution + build files -->
     <copy todir="${package.dir}">
       <fileset basedir="${root.dir}">
-        <include name="Spring.Messaging.Amqp.*"/>
+        <include name="Spring.Data.GemFire*"/>
         <exclude name="*.snk"/>
         <exclude name="*.suo"/>
         <exclude name="*.user"/>
@@ -188,7 +187,7 @@
       <fileset basedir="${root.dir}">
         <include name="src/**/*.*"/>
         <include name="test/**/*.*"/>
-        <include name="examples/**/*.*"/>
+        <include name="example/**/*.*"/>
         <exclude name="**/*.user"/>
       </fileset>
     </copy>
