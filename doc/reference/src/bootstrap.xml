@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<chapter id="bootstrap">
+  <title>Bootstrapping GemFire through the Spring container</title>
+
+  <para>One of the first tasks when using GemFire and Spring is to configure
+  the data grid through the IoC container. While this is <ulink
+  url="http://community.gemstone.com/display/gemfire/Integrating+GemFire+with+the+Spring+IoC+Container">possible</ulink>
+  out of the box, the configuration tends to be verbose and only address basic
+  cases. To address this problem, the Spring GemFire project provides several
+  classes that enable the configuration of distributed caches or regions to
+  support a variety of scenarios with minimal effort.</para>
+
+  <note>
+    <para>The M2 release of Spring Gemfire will include Spring namespaces that
+    will make it even easier to create and configure the cache and specific
+    region types (e.g. replicated, partitioned, etc.).</para>
+  </note>
+
+  <section id="bootstrap:cache">
+    <title>Configuring the GemFire
+    <interfacename>Cache</interfacename></title>
+
+    <para>In order to use the GemFire Fabric, one needs to either create a new
+    <interfacename>Cache</interfacename> or connect to an existing one. As in
+    the current version of GemFire, there can be only one opened cache per
+    application. In most cases the cache is created once and then all other
+    consumers connect to it.</para>
+
+    <para>In its simplest form, a cache can be defined in one line:</para>
+
+    <programlisting language="myxml">&lt;object name="default-cache" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"/&gt;  </programlisting>
+
+    <para>Here, the <emphasis>default-cache</emphasis> will try to connect to
+    an existing cache and, in case one does not exist, create it. Since no
+    additional properties were specified the created cache uses the default
+    cache configuration.</para>
+
+    <para>You can specify the name of the underlying DistributedSystem that
+    will be created with the property DistributedSystemName.</para>
+
+    <para>Especially in environments with opened caches, this basic
+    configuration can go a long way. For scenarios where the cache needs to be
+    configured, the user can pass in a reference the GemFire configuration
+    file:</para>
+
+    <programlisting language="xml">&lt;object name="cache-with-xml" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"&gt;
+  &lt;property name="CacheXml" value="cache.xml"/&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>In this example, if the cache needs to be created, it will use the
+    file named <literal>cache.xml</literal> located in runtime directory.
+    </para>
+
+    <para>In addition to referencing an external configuration file one can
+    specify GemFire settings directly through .NET name value properties. This
+    can be quite handy when just a few settings need to be changed:</para>
+
+    <programlisting language="xml">&lt;object name="cache-with-props" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"&gt; 
+  &lt;property name="Properties"&gt;
+    &lt;name-values&gt;
+      &lt;add key="name" value="StockCache"/&gt;
+      &lt;add key="log-level" value="warning"/&gt;
+    &lt;/name-values&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+
+    <para>The 'name' property is used to set the name of the Cache object. For
+    a complete list of properties refer to the Gemfire reference
+    documentation.</para>
+
+    <para>Spring object definitions support property replacement through the
+    use of <ulink
+    url="http://www.springframework.net/doc-latest/reference/html/objects.html#objects-variablesource">variable
+    replacement</ulink>. The following configuration allows you to externalize
+    the properties from the Spring configuration file which is a best
+    practice. The Spring configuration file is usually an embedded assembly
+    resource so as to prevent accidential changes in production. There are
+    seven locations supported out of the box in Sprng.NET where you can place
+    your externalized configuration data and can be extended to support your
+    own locations. In the following example the configuration flues would come
+    from a name-value configuraiton section in App/Web.config</para>
+
+    <programlisting language="myxml">&lt;object name="cache-with-props" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"&gt; 
+  &lt;property name="Properties"&gt;
+    &lt;name-values&gt;
+      &lt;add key="name" value="StockCache"/&gt;
+      &lt;add key="log-level" value="${cache.log-level}"/&gt;
+    &lt;/name-values&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
+
+&lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
+   &lt;property name="VariableSources"&gt;
+      &lt;list&gt;
+         &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+            &lt;property name="SectionNames" value="CacheConfiguration" /&gt;
+         &lt;/object&gt;
+      &lt;/list&gt;
+   &lt;/property&gt;
+&lt;/object&gt;
+
+</programlisting>
+
+    <para>The CacheConfiguration section in App.config would then look like
+    the following</para>
+
+    <programlisting language="myxml">&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;section name="CacheConfiguration" type="System.Configuration.NameValueSectionHandler"/&gt;
+  &lt;/configSections&gt;
+
+  &lt;CacheConfiguration&gt;
+    &lt;add key="cache.log-level" value="warning"/&gt;
+  &lt;/CacheConfiguration&gt;
+
+&lt;/configuration&gt;</programlisting>
+
+    <para>It is worth pointing out again, that the cache settings apply only
+    if the cache needs to be created, there is no opened cache in existence
+    otherwise the existing cache will be used and the configuration will
+    simply be discarded.</para>
+  </section>
+
+  <section id="bootstrap:region">
+    <title>Configuring a GemFire <interfacename>Region</interfacename></title>
+
+    <para>Once the <interfacename>Cache</interfacename> is configured, one
+    needs to configure one or more <interfacename>Region</interfacename>s to
+    interact with the data fabric. In a similar manner to the
+    <classname>CacheFactoryObject</classname>, the
+    <classname>RegionFactoryObject</classname> allows existing
+    <interfacename>Region</interfacename>s to retrieved or, in case they don't
+    exist, created using various settings. One can specify the
+    <interfacename>Region</interfacename> name, whether it will be destroyed
+    on shutdown (thereby acting as a temporary cache), the associated
+    <interfacename>CacheLoader</interfacename>s,
+    <interfacename>CacheListener</interfacename>s and
+    <interfacename>CacheWriter</interfacename>s and if needed, the
+    <interfacename>RegionAttributes</interfacename> for full
+    customization.</para>
+
+    <para>Let us start with a simple region declaration, named
+    <emphasis>basic</emphasis> using a nested cache declaration:</para>
+
+    <programlisting language="xml">&lt;object name="basic" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"&gt;
+  &lt;property Name="Cache"&gt;
+    &lt;object type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"/&gt; 
+  &lt;/property&gt; 
+&lt;/object&gt;
+</programlisting>
+
+    <para>By default the region name is the name of the object definition
+    unless explicitly specifed using the <literal>Name</literal> property.
+    </para>
+
+    <para>It is worth pointing out, that for the vast majority of cases
+    configuring the cache loader, listener and writer through the Spring
+    container is preferred since the same instances can be reused across
+    multiple regions and additionally, the instances themselves can benefit
+    from the container's rich feature set:</para>
+
+    <programlisting language="myxml">  &lt;object name="baseRegion" abstract="true"&gt;
+    &lt;property name="Endpoints" value="localhost:40404"/&gt;
+    &lt;property name="Cache" ref="Cache"/&gt;   &lt;!-- definition not shown here --&gt;
+  &lt;/object&gt;
+
+  &lt;object name="listeners" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"
+          parent="baseRegion"&gt;
+    &lt;property name="CacheListener"&gt;
+      &lt;object type="Spring.Data.GemFire.Tests.SimpleCacheListener, Spring.Data.GemFire.Tests"&gt;
+        &lt;!-- set properties or constructor arguments --&gt;
+      &lt;/object&gt;
+    &lt;/property&gt;
+    &lt;property name="CacheLoader"&gt;
+      &lt;object type="Spring.Data.GemFire.Tests.SimpleCacheLoader, Spring.Data.GemFire.Tests"/&gt;      
+    &lt;/property&gt;
+    &lt;property name="CacheWriter"&gt;
+      &lt;object type="Spring.Data.GemFire.Tests.SimpleCacheWriter, Spring.Data.GemFire.Tests"/&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+
+</programlisting>
+
+    <section id="bootstrap:region:client">
+      <title>Configuring update interest for <emphasis>client</emphasis>
+      <interfacename>Region</interfacename></title>
+
+      <para>For scenarios where a <emphasis>CacheServer</emphasis> is used and
+      <emphasis>clients</emphasis> need to be configured, SGI offers a
+      dedicated configuration class named:
+      <classname>ClientRegionFactoryObject</classname>. This allows client
+      <emphasis>interests</emphasis> to be registered in both key and regex
+      form through <classname>AllKeysInterest</classname>,
+      <classname>KeyInterest</classname>, and
+      <classname>RegexInterest</classname> classes in the
+      <literal>Spring.Data.GemFire</literal> namespace. Here is an example of
+      how to configure the AllKeys interest in the region.</para>
+
+      <programlisting language="myxml">  &lt;object name="baseRegion" abstract="true"&gt;
+    &lt;property name="Endpoints" value="localhost:40404"/&gt;
+    &lt;property name="Cache" ref="Cache"/&gt;   &lt;!-- definition not shown here --&gt;
+  &lt;/object&gt;
+
+  &lt;object name="basic-interest" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"
+          parent="baseRegion"&gt;
+    &lt;property name="ClientNotification" value="true"/&gt;
+    &lt;property name="interests"&gt;
+      &lt;list&gt;
+        &lt;object type="Spring.Data.GemFire.AllKeysInterest, Spring.Data.GemFire"/&gt;
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;
+</programlisting>
+    </section>
+  </section>
+</chapter>
