@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Spring.Data.GemFire.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,6 +67,7 @@
     <Compile Include="IInterest.cs" />
     <Compile Include="KeyInterest.cs" />
     <Compile Include="InterestResultPolicy.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="RegexInterest.cs" />
     <Compile Include="RegionFactoryObject.cs" />
   </ItemGroup>
