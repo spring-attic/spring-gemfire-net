@@ -23,7 +23,6 @@ using GemStone.GemFire.Cache;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-using AssertionException=GemStone.GemFire.Cache.AssertionException;
 
 namespace Spring.Data.GemFire.Tests
 {
@@ -45,21 +44,22 @@ namespace Spring.Data.GemFire.Tests
         }
 
         [Test]
+        [Ignore]
         public void Foo()
         {
             // 1. Connect to system
             Console.WriteLine("{0}Connecting to GemFire", Environment.NewLine);
-            DistributedSystem dsys = DistributedSystem.Connect("exampledstest");
+            DistributedSystem dsys = DistributedSystem.Connect("exampleregion");
 
             // 2. Create a cache
-            Cache cache = CacheFactory.Create("exampledscache", dsys);
+            Cache cache = CacheFactory.Create("exampleregion", dsys);
 
             // 3. Create default region attributes
             AttributesFactory af = new AttributesFactory();
             RegionAttributes rAttrib = af.CreateRegionAttributes();
 
             // 4. Create region
-            Region region = cache.CreateRegion("exampledsregion", rAttrib);
+            Region region = cache.CreateRegion("exampleregion", rAttrib);
 
         }
 
@@ -89,10 +89,10 @@ namespace Spring.Data.GemFire.Tests
         }
 
         [Test]
-        public void RegionWithInterest()
+        public void RegionWithAllKeyInterest()
         {
-            Region region = (Region)ctx.GetObject("basic-interest");
-            Assert.AreEqual("basic-interest", region.Name);
+            Region region = (Region)ctx.GetObject("basic-allkey-interest");
+            Assert.AreEqual("basic-allkey-interest", region.Name);
         }
 
         [Test]

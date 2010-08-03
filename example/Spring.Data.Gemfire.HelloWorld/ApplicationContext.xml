@@ -16,9 +16,30 @@
     <property name="Name" value="exampleregion"/>
     <property name="ClientNotification" value="true"/>
     <property name="Interests">
+      
       <list>
+        <!--
         <object type="Spring.Data.GemFire.AllKeysInterest, Spring.Data.GemFire"/>
+        -->
+
+        <!--
+        <object type="Spring.Data.GemFire.KeyInterest">
+          <property name="Keys">
+            <list>
+              <object type="GemStone.GemFire.Cache.CacheableString" factory-method="Create">
+                <constructor-arg value="1"/>
+              </object>
+            </list>
+          </property>
+        </object>
+        -->
+        
+        <object type="Spring.Data.GemFire.RegexInterest">
+          <property name="Regex" value="Key-.*"/>
+        </object>
+        
       </list>
+
     </property>
   </object>
 

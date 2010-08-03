@@ -6,12 +6,14 @@
       <name-values>
         <add key="log-level" value="warning"/>
       </name-values>
-    </property>              
+    </property>
+    <property name="DisconnectOnClose" value="false"/>
   </object>
 
 
   <object name="cache-with-name" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
     <property name="Name" value="cache-with-name"/>
+    <property name="DisconnectOnClose" value="false"/>
   </object>
 
   <object name="cache-with-props" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
@@ -23,10 +25,12 @@
         <add key="log-level" value="warning"/>
       </name-values>
     </property>
+    <property name="DisconnectOnClose" value="false"/>
   </object>
   
   <object name="cache-with-xml" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
     <property name="CacheXml" value="cache-config.xml"/>
+    <property name="DisconnectOnClose" value="false"/>
   </object>
   
   

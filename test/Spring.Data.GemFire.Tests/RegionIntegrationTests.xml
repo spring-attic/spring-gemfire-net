@@ -6,7 +6,8 @@
       <name-values>
         <add key="log-level" value="warning"/>
       </name-values>
-    </property>              
+    </property>
+    <property name="DisconnectOnClose" value="false"/>
   </object>
 
   <object name="baseRegion" abstract="true">
@@ -39,7 +40,7 @@
     </property>
   </object>
 
-  <object name="basic-interest" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"
+  <object name="basic-allkey-interest" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"
           parent="baseRegion">
     <property name="ClientNotification" value="true"/>
     <property name="interests">
@@ -48,6 +49,5 @@
       </list>
     </property>
   </object>
-  
   
 </objects>

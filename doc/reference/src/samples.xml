@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <chapter id="samples">
   <title>Sample Applications</title>
 
@@ -16,20 +14,31 @@
   built in visual studio.</para>
 
   <section>
-    <title>Prerequisites</title>
+    <title id="sample-hw-prereq">Prerequisites</title>
 
-    <para>You will need to <ulink
-    url="http://download.gemstone.com/">download</ulink> and install </para>
+    <para>1. You will need to <ulink
+    url="http://download.gemstone.com/">download</ulink>, install, and obtain
+    a license for</para>
 
     <itemizedlist>
       <listitem>
-        <para>GemFire Enterprise 6.0 </para>
+        <para>GemFire Enterprise 6.0</para>
+      </listitem>
+
+      <listitem>
+        <para>GemFire Enterprise Native Client 3.0.0.9</para>
       </listitem>
     </itemizedlist>
 
+    <para>The GemFire Enterprise licence file, gemfireLicense.zip should
+    reside in the root of your GemFire Enterprise install directory. The
+    GemFire Enterprise Native Client licence file, gfCpplicense.zip, should
+    reside in the 'bin' sub-directory of the Native Client install
+    directory.</para>
+
     <para>The .NET clients run in a client-server architecture. This is shown
     below from the perspective of a single 'native (C++ or .NET) client and a
-    single cache server process. </para>
+    single cache server process.</para>
 
     <figure>
       <title>Client-Server Configuration for native (C++ or .NET)
@@ -42,124 +51,162 @@
       </mediaobject>
     </figure>
 
-    <para> This requires that you run the cacheserver.bat file located in the
-    'bin' of the GemFire Enterprise 6.0 product. The spring gemfire project
-    ships with the essential GemFire client side libraries to run the sample
-    application. However, it is recommended that you download the GemFire
-    Enterprise Native Client 3.0.0.9 from the download site to have access to
-    reference documentation. You may also find the <ulink
+    <para>While not shown in this picture, there can be multiple .NET/C++
+    client applications and also multiple other processes that act in a
+    peer-to-peer like manner as part of the GemFire Distributed System.</para>
+
+    <para>When running in a client-server architecture there needs to be
+    configuration of the client side, the .NET/C++ Application, and the data
+    grid side, the Java Cache Server. In this example the configuration of the
+    client side is done entirely by the FactoryObject's declared in the Spring
+    XML file. The data grid side is configured with a standalone configuration
+    file.</para>
+
+    <para>2. The Java Cache Server requires a configuration file in order to
+    run. This file is provided in the Spring GemFire distribution and in named
+    <literal>cache.xml</literal>. It is located in the
+    'example\Spring.Data.Gemfire.HelloWorld' directory. It needs to be into
+    the GemFire Enterprise 6.0 'bin' directory where the cacheserver.bat file
+    is located.</para>
+
+    <para>3. Run the cacheserver.bat file located in the 'bin' of the GemFire
+    Enterprise 6.0 product. By default it will load a configuration file named
+    '<literal>cache.xm</literal>l'.</para>
+
+    <para>The Spring GemFire project ships with the essential GemFire client
+    side libraries to run the sample application. Note that because the .NET
+    Client API is a wrapper around the C++ API, it needs to be referenced in
+    either the App.config file or installed into the GAC. The HelloWorld
+    example program is configured to load the libraries from the
+    'lib\GemFire\net\2.0' directory.</para>
+
+    <para>Despite providing the client However, it is recommended that you
+    download the GemFire Enterprise Native Client 3.0.0.9 from the download
+    site to have access to reference documentation. You may also find the
+    <ulink
     url="http://community.gemstone.com/display/gemfire/GemFire+.NET+API+Tour">GemFire
     .NET API Tour</ulink> of interest to read.</para>
   </section>
 
   <section id="samples:hello-world">
-    <title>Hello World</title>
+    <title id="sample-hw-intro">Hello World</title>
 
-    <para>The Hello World sample demonstrates the core functionality of the
-    Spring GemFire project. It bootstraps GemFire, configures it, executes
-    arbitrary commands against it and shuts it down when the application
-    exits. Multiple instances can be started at the same time as they will
-    work with each other sharing data without any user intervention.</para>
+    <para>The Hello World sample demonstrates the basic functionality of the
+    Spring GemFire project and is also useful to understand how GemFire
+    clients work. The application bootstraps GemFire, configures it, allows
+    for the execution of several commands against the data grid, and
+    gracefully shuts down when the application exits. Multiple instances can
+    be started at the same time as they will work with each other sharing data
+    without any user intervention.</para>
 
     <section id="samples:hello-world:start-stop">
-      <title>Starting and stopping the sample</title>
+      <title id="sample-hw-intro-startstop">Compiling, starting and stopping
+      the sample</title>
 
       <para>Hello World is designed as a stand-alone application. The main
       class is in the file <literal>Program.cs</literal> and generates an
-      executable named Spring.Data.GemFire.HelloWorld.exe.</para>
+      executable named <literal>HelloWorld.exe</literal>. To start the example
+      follow the steps</para>
 
-      <para>To comple the example, load the solution Spring.Data.GemFire.sln
-      in the root of the Spring Gemfire project directory. </para>
+      <para>To compile the example, load the solution
+      <literal>Spring.Data.GemFire.sln</literal> in the root of the Spring
+      GemFire project directory.</para>
 
-      <para>The file cache.xml should be copied into the GemFire Enterprise
-      6.0 'bin' directory where the cacheserver.bat fle is located. The
-      cacheserver.bat file should then be executed to start the cacheserver
-      process.</para>
+      <orderedlist>
+        <listitem>
+          <para>Load the Visual Studio 2008 solution Spring.Data.GemFire.sln
+          located in the root of the Spring GemFire project directory. Compile
+          the solution.</para>
+        </listitem>
 
-      <para>To stop the sample, simply type <literal>exit</literal> at the
-      command line or press <literal>Ctrl+C</literal> to stop the VM and
-      shutdown the Spring container.</para>
+        <listitem>
+          <para>Ensure that the Java Cache Server is running as described in
+          the previous section.</para>
+        </listitem>
+
+        <listitem>
+          <para>Set the startup project to be the
+          Spring.Data.Gemfire.HelloWorld project <emphasis
+          role="bold">or</emphasis> cd to the
+          '<literal>example\Spring.Data.Gemfire.HelloWorld\bin\Debug</literal>'
+          directory and run <literal>HelloWorld.exe</literal>.<note>
+              <para>You can pass as a command line argument the name that will
+              appear before you enter commands in the shell. This is useful
+              for distinguishing different members of the distributed
+              system</para>
+            </note></para>
+        </listitem>
+
+        <listitem>
+          <para>You can now execute commands in the shell, which will be
+          described in the next section. Exit the shell by typing
+          '<literal>exit</literal>'.</para>
+        </listitem>
+      </orderedlist>
     </section>
 
     <section id="samples:hello-world:run">
-      <title>Using the sample</title>
+      <title id="sample-hw-using">Using the sample</title>
 
-      <para>Once started, the sample will create a shared data grid and allow
-      the user to issue commands against it. The output will likely look as
-      follows:</para>
+      <para>Once started, the sample will create a client side cache that is
+      replicated with the server cache contained in the Java Cache Server. For
+      example, the command line '<literal>HelloWorld.exe client-1</literal>'
+      will result in the following greeting</para>
 
-      <programlisting>INFO: Created GemFire Cache [Spring GemFire World] v. X.Y.Z
-INFO: Created new cache region [myWorld]
-INFO: Member xxxxxx:50694/51611 connecting to region [myWorld]
-Hello World!
+      <programlisting>Hello World!
 Want to interact with the world ? ...
 Supported commands are:
 
 get &lt;key&gt; - retrieves an entry (by key) from the grid
 put &lt;key&gt; &lt;value&gt; - puts a new entry into the grid
 remove &lt;key&gt; - removes an entry (by key) from the grid
-...</programlisting>
+size - returns the size of the grid
+clear - removes all mapping in the grid
+keys - returns the keys contained by the grid
+values - returns the values contained by the grid
+containsKey &lt;key&gt; - indicates if the given key is contained by the grid
+containsValue &lt;value&gt; - indicates if the given value is contained by the grid
+map - returns a list of the key-value pairs in the grid
+
+query &lt;query&gt; - executes a query on the grid
+
+help - this info
+exit - this node exists
+client-1&gt;</programlisting>
 
       <para>For example to add new items to the grid one can use:</para>
 
-      <programlisting>-&gt; <emphasis role="bold">put 1 unu</emphasis>
-INFO: Added [1=unu] to the cache
+      <programlisting>client-1&gt;<emphasis role="bold">put 1 unu</emphasis>
 null
--&gt; <emphasis role="bold">put 1 one</emphasis>
-INFO: Updated [1] from [unu] to [one]
-unu
--&gt; <emphasis role="bold">size</emphasis>
+client-1&gt;<emphasis role="bold">put 1 one</emphasis>
+old value = [unu]
+client-1&gt;<emphasis role="bold">size</emphasis>
 1
--&gt; <emphasis role="bold">put 2 two</emphasis>
-INFO: Added [2=two] to the cache
+client-1&gt;<emphasis role="bold">put 2 two</emphasis>
 null
--&gt; <emphasis role="bold">size</emphasis>
-2</programlisting>
+client-1&gt;<emphasis role="bold">size</emphasis>
+2
+client-1&gt;</programlisting>
 
       <para>Multiple instances can be created at the same time. Once started,
-      the new VMs automatically see the existing region and its
-      information:</para>
+      the new clients automatically see the existing region and its
+      information. Start a second client with the command line
+      '<literal>HelloWorld.exe client-2</literal>'</para>
 
-      <programlisting>INFO: Connected to Distributed System ['Spring GemFire World'=xxxx:56218/49320@yyyyy]
-Hello World!
+      <programlisting>Hello World!
 ...
 
--&gt; <emphasis role="bold">size</emphasis>
+client-2&gt;<emphasis role="bold">size</emphasis>
 2
--&gt; <emphasis role="bold">map</emphasis>
-[2=two] [1=one]
--&gt; <emphasis role="bold">query length = 3</emphasis>
-[one, two]
+client-2&gt;<emphasis role="bold">map</emphasis>
+[2=two][1=one]
+client-2&gt;
 </programlisting>
 
       <para>Experiment with the example, start (and stop) as many instances as
       you want, run various commands in one instance and see how the others
-      react. To preserve data, at least one instance needs to be alive all
-      times - if all instances are shutdown, the grid data is completely
-      destroyed (in this example - to preserve data between runs, see the
-      GemFire documentations).</para>
-    </section>
-
-    <section id="samples:hello-world:explained">
-      <title>Hello World Sample Explained</title>
-
-      <para>Hello World uses both Spring XML and annotations for its
-      configuration. The initial boostrapping configuration is
-      <literal>app-context.xml</literal> which includes the cache
-      configuration, defined under <literal>cache-context.xml</literal> file
-      and performs classpath <ulink
-      url="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/beans.html#beans-classpath-scanning">scanning</ulink>
-      for Spring <ulink
-      url="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/beans.html#beans-factorybeans-annotations">components</ulink>.
-      The cache configuration defines the GemFire cache, region and for
-      illustrative purposes a simple cache listener that acts as a
-      logger.</para>
-
-      <para>The main <emphasis>beans</emphasis> are
-      <literal>HelloWorld</literal> and <literal>CommandProcessor</literal>
-      which rely on the <classname>GemfireTemplate</classname> to interact
-      with the distributed fabric. Both classes use annotations to define
-      their dependency and life-cycle callbacks.</para>
+      react. To preserve data, the Java Cache Servier needs to be running at
+      all times.</para>
     </section>
   </section>
 </chapter>

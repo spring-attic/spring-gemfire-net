@@ -39,7 +39,7 @@ namespace Spring.Data.GemFire
     /// or the creation of a new one.
     /// </summary>
     /// <author>Mark Pollack</author>
-    public class CacheFactoryObject : IDisposable, IInitializingObject,
+    public class CacheFactoryObject : IDisposable, IInitializingObject, IObjectNameAware,
                                       IFactoryObject, IPersistenceExceptionTranslator
     {
         #region Fields
@@ -54,6 +54,8 @@ namespace Spring.Data.GemFire
         private string distributedSystemName = DEFAULT_DISTRIBUTED_SYSTEM_NAME;
 
         private string name = DEFAULT_CACHE_NAME;
+
+        private bool disconnectOnClose = true;
 
         private DistributedSystem system;
         private NameValueCollection properties;
@@ -89,6 +91,17 @@ namespace Spring.Data.GemFire
         public string CacheXml
         {
             set { cacheXml = value; }
+        }
+
+        /// <summary>
+        /// Sets a value indicating whether to call DistributedSystem.Disconnect when this object is 
+        /// disposed.  There is a but in the 3.0.0.9 client that may hang calls to close.  The default is
+        /// true, set to false if you experience a hang in the application.
+        /// </summary>
+        /// <value><c>true</c> to call DistributedSystem.Disconnect when this object is dispose; otherwise, <c>false</c>.</value>
+        public bool DisconnectOnClose
+        {
+            set { disconnectOnClose = value; }
         }
 
         #endregion
@@ -162,13 +175,15 @@ namespace Spring.Data.GemFire
                 cache.Close();
             }
             cache = null;
-            /* TODO not working on my machine, call hangs
-            
-            if (system != null && DistributedSystem.IsConnected)
-            {               
-                DistributedSystem.Disconnect();
+
+            if (disconnectOnClose)
+            {
+                if (system != null && DistributedSystem.IsConnected)
+                {
+                    DistributedSystem.Disconnect();
+                }
+                system = null;
             }
-            system = null;*/
         }
 
         /// <summary>
@@ -234,5 +249,15 @@ namespace Spring.Data.GemFire
             get { return true; }
         }
 
+        /// <summary>
+        /// Sets the name of the cache to the name of the Spring object definition.  Can be overrided by 
+        /// specifying 'name' as the key in the Properties collection.
+        /// </summary>
+        public string ObjectName
+        {
+            set {
+                this.name = value;
+            }
+        }
     }
 }

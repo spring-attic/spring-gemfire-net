@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE preface PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <chapter id="apis">
   <title>Working with the GemFire APIs</title>
 
@@ -23,9 +21,10 @@
     url="http://www.springframework.net/doc-latest/reference/html/orm.html#orm-hibernate-straight-ex">exception
     translation</ulink> can be applied transparently to your data access
     objects through the use of the <literal>[Repository]</literal> attribute
-    and AOP by defining a PersistenceExceptionTranslationPostProcessor object.
-    The same exception translation functionality is enabled when using Gemfire
-    as long as at least a <classname>CacheFactoryObject</classname> is
+    and AOP by defining a
+    <classname>PersistenceExceptionTranslationPostProcessor</classname>
+    object. The same exception translation functionality is enabled when using
+    GemFire as long as at least a <classname>CacheFactoryObject</classname> is
     declared. The <interfacename>Cache</interfacename> factory acts as an
     exception translator which is automatically detected by the Spring
     infrastructure and used accordingly.</para>
