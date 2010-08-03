@@ -14,7 +14,7 @@
   built in visual studio.</para>
 
   <section>
-    <title id="sample-hw-prereq">Prerequisites</title>
+    <title>Prerequisites</title>
 
     <para>1. You will need to <ulink
     url="http://download.gemstone.com/">download</ulink>, install, and obtain
@@ -89,7 +89,7 @@
   </section>
 
   <section id="samples:hello-world">
-    <title id="sample-hw-intro">Hello World</title>
+    <title>Hello World</title>
 
     <para>The Hello World sample demonstrates the basic functionality of the
     Spring GemFire project and is also useful to understand how GemFire
@@ -100,7 +100,7 @@
     without any user intervention.</para>
 
     <section id="samples:hello-world:start-stop">
-      <title id="sample-hw-intro-startstop">Compiling, starting and stopping
+      <title>Compiling, starting and stopping
       the sample</title>
 
       <para>Hello World is designed as a stand-alone application. The main
@@ -146,7 +146,7 @@
     </section>
 
     <section id="samples:hello-world:run">
-      <title id="sample-hw-using">Using the sample</title>
+      <title>Using the sample</title>
 
       <para>Once started, the sample will create a client side cache that is
       replicated with the server cache contained in the Java Cache Server. For

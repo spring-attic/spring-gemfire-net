@@ -18,9 +18,9 @@
     <property name="Interests">
       
       <list>
-        <!--
+        
         <object type="Spring.Data.GemFire.AllKeysInterest, Spring.Data.GemFire"/>
-        -->
+        
 
         <!--
         <object type="Spring.Data.GemFire.KeyInterest">
@@ -34,9 +34,11 @@
         </object>
         -->
         
+        <!--
         <object type="Spring.Data.GemFire.RegexInterest">
           <property name="Regex" value="Key-.*"/>
         </object>
+        -->
         
       </list>
 

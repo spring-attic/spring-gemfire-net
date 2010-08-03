@@ -41,7 +41,7 @@
           <fo:table-row>
             <fo:table-cell text-align="center">
               <fo:block font-family="Helvetica" font-size="12pt" padding="10mm">
-                <xsl:text>Copyright &#xA9; 2004-2008 </xsl:text>
+                <xsl:text>Copyright &#xA9; 2010 </xsl:text>
                 <xsl:for-each select="bookinfo/authorgroup/author">
                   <xsl:if test="position() > 1">
                     <xsl:text>, </xsl:text>
@@ -90,7 +90,7 @@
     <xsl:param name="gentext-key" select="''" />
     <xsl:variable name="Version">
       <xsl:if test="//releaseinfo">
-        <xsl:text>Spring Framework (</xsl:text>
+        <xsl:text>Spring GemFire (</xsl:text>
         <xsl:value-of select="//releaseinfo" />
         <xsl:text>)</xsl:text>
       </xsl:if>
