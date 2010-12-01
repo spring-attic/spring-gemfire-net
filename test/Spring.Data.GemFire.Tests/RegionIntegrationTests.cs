@@ -43,9 +43,7 @@ namespace Spring.Data.GemFire.Tests
             ctx.Dispose();
         }
 
-        [Test]
-        [Ignore]
-        public void Foo()
+        public void SampleUsage()
         {
             // 1. Connect to system
             Console.WriteLine("{0}Connecting to GemFire", Environment.NewLine);
@@ -96,21 +94,56 @@ namespace Spring.Data.GemFire.Tests
         }
 
         [Test]
-        public void Hello()
+        public void RegisterRegexInterest()
         {
-            DistributedSystem dsys = DistributedSystem.Connect("exampledstest");
-            Cache cache = CacheFactory.Create("exampledscache", dsys);            
-            
+            // 1. Connect to system
+            Console.WriteLine("{0}Connecting to GemFire", Environment.NewLine);
+            DistributedSystem dsys = DistributedSystem.Connect("exampleregion");
+
+            // 2. Create a cache
+            Cache cache = CacheFactory.Create("exampleregion", dsys);
+
+            // 3. Create default region attributes
             AttributesFactory af = new AttributesFactory();
             af.SetClientNotificationEnabled(true);
+            
             af.SetEndpoints("localhost:40404");
             RegionAttributes rAttrib = af.CreateRegionAttributes();
-            Region region = cache.CreateRegion("exampledsregion", rAttrib);
+
+            // 4. Create region
+            //Region region = cache.CreateRegion("exampleregion", rAttrib);
+
+            RegionFactory regionFact = cache.CreateRegionFactory(RegionShortcut.CACHING_PROXY);            
+            Region region = regionFact.Create("exampleregion");
+
+            region.RegisterRegex("Keys-*", false, null, true);
+            //region.RegisterRegex(".*", false, new System.Collections.Generic.List<ICacheableKey>());
+        }
+
+        [Test]
+        public void NewAPI()
+        {
+            // 1. Create a cache
+            CacheFactory cacheFactory = CacheFactory.CreateCacheFactory();
+            cacheFactory.SetSubscriptionEnabled(true);
+            Cache cache = cacheFactory.Create();
+
+
+            GemStone.GemFire.Cache.PoolFactory poolFactory = GemStone.GemFire.Cache.PoolManager.CreateFactory();
+            poolFactory.AddServer("localhost", 40404);
+            poolFactory.SetSubscriptionEnabled(true);
+            poolFactory.Create("examplePool");
+
+            // 2. Create default region attributes using region factory
+            RegionFactory regionFactory =
+            cache.CreateRegionFactory(RegionShortcut.CACHING_PROXY);
+            regionFactory.SetPoolName("examplePool");
+
             
 
-            region.RegisterAllKeys();
-
-            cache.Close();
+            // 3. Create region
+            Region region = regionFactory.Create("exampleregion");
+            region.RegisterRegex("Keys-*", false, null, true);
         }
     }
 }

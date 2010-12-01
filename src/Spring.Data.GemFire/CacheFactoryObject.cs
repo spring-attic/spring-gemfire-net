@@ -38,7 +38,13 @@ namespace Spring.Data.GemFire
     /// Factory used for configuring a Gemfire Cache manager. Allows either retrieval of an existing, opened cache 
     /// or the creation of a new one.
     /// </summary>
-    /// <author>Mark Pollack</author>
+    /// <remarks>This class implements the <see cref="IPersistenceExceptionTranslator"/> interface, as
+    /// auto-detected by Spring's PersistenceExceptionTranslationPostProcessor for AOP-based translation of
+    /// native exceptions to Spring DataAccessExceptions.  Hence, the presence of this class automatically enables
+    /// a PersistenceExceptionTranslationPostProcessor to translate GemFire exceptions.
+    /// </remarks>
+    /// <author>Costin Leau</author>
+    /// <author>Mark Pollack (.NET)</author>
     public class CacheFactoryObject : IDisposable, IInitializingObject, IObjectNameAware,
                                       IFactoryObject, IPersistenceExceptionTranslator
     {
@@ -95,7 +101,7 @@ namespace Spring.Data.GemFire
 
         /// <summary>
         /// Sets a value indicating whether to call DistributedSystem.Disconnect when this object is 
-        /// disposed.  There is a but in the 3.0.0.9 client that may hang calls to close.  The default is
+        /// disposed.  There is a bug in the 3.0.0.9 client that may hang calls to close.  The default is
         /// true, set to false if you experience a hang in the application.
         /// </summary>
         /// <value><c>true</c> to call DistributedSystem.Disconnect when this object is dispose; otherwise, <c>false</c>.</value>
@@ -158,10 +164,11 @@ namespace Spring.Data.GemFire
                     }
                 }
             }
+            /*
             if (StringUtils.HasText(name))
             {
                 gemfirePropertes.Insert("name", name.Trim());
-            }
+            }*/
             return gemfirePropertes;
         }
 

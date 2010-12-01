@@ -36,9 +36,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="GemStone.GemFire.Cache, Version=3.0.0.9, Culture=neutral, PublicKeyToken=126e6338d9f55e0c, processorArchitecture=x86">
+    <Reference Include="GemStone.GemFire.Cache, Version=3.5.0.0, Culture=neutral, PublicKeyToken=126e6338d9f55e0c, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GemFire\net\2.0\GemStone.GemFire.Cache.dll</HintPath>
+      <HintPath>..\..\lib\GemFire-NativeClient-3.5\net\2.0\GemStone.GemFire.Cache.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Aop, Version=1.3.0.20349, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,14 +62,28 @@
     </Compile>
     <Compile Include="AllKeysInterest.cs" />
     <Compile Include="CacheFactoryObject.cs" />
+    <Compile Include="Config\CacheParser.cs" />
+    <Compile Include="Config\ClientRegionParser.cs" />
+    <Compile Include="Config\PoolParser.cs" />
+    <Compile Include="Config\LookupRegionParser.cs" />
+    <Compile Include="Config\GemfireNamespaceParser.cs" />
+    <Compile Include="Config\ParsingUtils.cs" />
     <Compile Include="GemFireCacheUtils.cs" />
     <Compile Include="GemFireSystemException.cs" />
     <Compile Include="IInterest.cs" />
     <Compile Include="KeyInterest.cs" />
     <Compile Include="InterestResultPolicy.cs" />
     <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="PoolConnection.cs" />
+    <Compile Include="PoolFactoryDefaults.cs" />
+    <Compile Include="PoolFactoryObject.cs" />
     <Compile Include="RegexInterest.cs" />
+    <Compile Include="RegionAttributesFactoryObject.cs" />
     <Compile Include="RegionFactoryObject.cs" />
+    <Compile Include="RegionLookupFactoryObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Config\spring-gemfire-1.0.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

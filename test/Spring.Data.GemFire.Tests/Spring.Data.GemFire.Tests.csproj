@@ -35,9 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="GemStone.GemFire.Cache, Version=3.0.0.9, Culture=neutral, PublicKeyToken=126e6338d9f55e0c, processorArchitecture=x86">
+    <Reference Include="GemStone.GemFire.Cache, Version=3.5.0.0, Culture=neutral, PublicKeyToken=126e6338d9f55e0c, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GemFire\net\2.0\GemStone.GemFire.Cache.dll</HintPath>
+      <HintPath>..\..\lib\GemFire-NativeClient-3.5\net\2.0\GemStone.GemFire.Cache.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.5.0.9015, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,11 +69,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheIntegrationTests.cs" />
+    <Compile Include="Config\CacheNamespaceTests.cs">
+    </Compile>
+    <Compile Include="Config\ClientRegionNamespaceTests.cs" />
+    <Compile Include="Config\PoolNamespaceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionIntegrationTests.cs" />
     <Compile Include="SimpleCacheListener.cs" />
     <Compile Include="SimpleCacheLoader.cs" />
     <Compile Include="SimpleCacheWriter.cs" />
+    <Compile Include="TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Spring.Data.GemFire\Spring.Data.GemFire.csproj">
@@ -86,6 +91,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CacheIntegrationTests.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\CacheNamespaceTests.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\ClientRegionNamespaceTests.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\PoolNamespaceTests.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="RegionIntegrationTests.xml">

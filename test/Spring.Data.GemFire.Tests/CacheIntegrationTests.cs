@@ -22,7 +22,6 @@ using GemStone.GemFire.Cache;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Objects.Factory.Xml;
 
 namespace Spring.Data.GemFire.Tests
 {
@@ -48,7 +47,7 @@ namespace Spring.Data.GemFire.Tests
         public void BasicCache()
         {
             Cache cache = (Cache) ctx.GetObject("default-cache");
-            Assert.AreEqual("NativeCache", cache.Name);
+            Assert.AreEqual("default-cache", cache.Name);
         }
 
         [Test]
@@ -57,7 +56,7 @@ namespace Spring.Data.GemFire.Tests
             Cache cache = (Cache)ctx.GetObject("cache-with-name");
             Assert.AreEqual("cache-with-name", cache.Name);
             //This is the default name of the distributed system.
-            Assert.AreEqual("DistributedSystemDotNet", cache.DistributedSystem.Name);
+            Assert.AreEqual("MySpringDistributedSystem", cache.DistributedSystem.Name);
         }
 
         [Test]

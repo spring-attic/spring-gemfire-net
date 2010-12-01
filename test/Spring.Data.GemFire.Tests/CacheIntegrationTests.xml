@@ -1,19 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net" default-lazy-init="true">
+<!-- all objects are lazy to allow the same config to be used between multiple tests -->
+<!-- as there can be only one cache per AppDomain -->
+<objects xmlns="http://www.springframework.net" 
+         xmlns:ems="http://www.springframework.net/ems"
+         default-lazy-init="true">
 
   <object name="default-cache" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
+    <property name="DistributedSystemName" value="MySpringDistributedSystem"/>
     <property name="properties">
       <name-values>
         <add key="log-level" value="warning"/>
       </name-values>
     </property>
+    <!-- the bug causing this setting was fixed in the 3.5 release -->
+    <!--
     <property name="DisconnectOnClose" value="false"/>
+    -->
   </object>
 
 
   <object name="cache-with-name" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
     <property name="Name" value="cache-with-name"/>
+    <property name="DistributedSystemName" value="MySpringDistributedSystem"/>
+    <!-- the bug causing this setting was fixed in the 3.5 release -->
+    <!--
     <property name="DisconnectOnClose" value="false"/>
+    -->
   </object>
 
   <object name="cache-with-props" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
@@ -25,12 +37,18 @@
         <add key="log-level" value="warning"/>
       </name-values>
     </property>
+    <!-- the bug causing this setting was fixed in the 3.5 release -->
+    <!--
     <property name="DisconnectOnClose" value="false"/>
+    -->
   </object>
   
   <object name="cache-with-xml" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire">
     <property name="CacheXml" value="cache-config.xml"/>
+    <!-- the bug causing this setting was fixed in the 3.5 release -->
+    <!--
     <property name="DisconnectOnClose" value="false"/>
+    -->
   </object>
   
   

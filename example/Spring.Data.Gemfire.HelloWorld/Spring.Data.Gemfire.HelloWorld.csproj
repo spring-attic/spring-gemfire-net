@@ -35,9 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="GemStone.GemFire.Cache, Version=3.0.0.9, Culture=neutral, PublicKeyToken=126e6338d9f55e0c, processorArchitecture=x86">
+    <Reference Include="GemStone.GemFire.Cache, Version=3.5.0.0, Culture=neutral, PublicKeyToken=126e6338d9f55e0c, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GemFire\net\2.0\GemStone.GemFire.Cache.dll</HintPath>
+      <HintPath>..\..\lib\GemFire-NativeClient-3.5\net\2.0\GemStone.GemFire.Cache.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Aop, Version=1.3.0.20349, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

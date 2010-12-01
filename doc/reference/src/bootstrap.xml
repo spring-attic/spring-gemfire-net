@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="bootstrap">
+<chapter id="bootstrap" version="5" xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns2="http://www.w3.org/1999/xlink"
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Bootstrapping GemFire through the Spring container</title>
 
   <para>One of the first tasks when using GemFire and Spring is to configure
@@ -11,11 +16,47 @@
   classes that enable the configuration of distributed caches or regions to
   support a variety of scenarios with minimal effort.</para>
 
-  <note>
-    <para>The M2 release of Spring GemFire will include Spring namespaces that
-    will make it even easier to create and configure the cache and specific
-    region types (e.g. replicated, partitioned, etc.).</para>
-  </note>
+  <section>
+    <title>Using the Spring GemFire Namespace</title>
+
+    <para>To simplify configuration, SGF provides a dedicated namespace for
+    most of its components. However, one can opt to configure the objects
+    directly through the usual &lt;object&gt; definition. For more information
+    about XML Schema-based configuration in Spring.NET, see <ulink
+    url="http://www.springframework.net/doc-latest/reference/html/xsd-config.html">this</ulink>
+    appendix in the Spring.NET Framework reference documentation.</para>
+
+    <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;objects xmlns="http://www.springframework.net" 
+         xmlns:gfe<co id="gfe#ns#prefix" />="http://www.springframework.net/gemfire<co
+        id="gfe#ns#uri" />"&gt;
+
+  &lt;gfe:cache ...&gt;<co id="gfe#ns#example" />
+
+&lt;/objects&gt;
+    </programlisting>
+
+    <calloutlist>
+      <callout arearefs="gfe#ns#prefix">
+        <para>Spring GemFire namespace prefix. Any name can do but through out
+        the reference documentation, the <literal>gfe</literal> will be
+        used.</para>
+      </callout>
+
+      <callout arearefs="gfe#ns#uri">
+        <para>The namespace URI.</para>
+      </callout>
+
+      <callout arearefs="gfe#ns#example">
+        <para>Declaration example for the GemFire namespace. Notice the prefix
+        usage.</para>
+      </callout>
+    </calloutlist>
+
+    <para xmlns="">For the remainder of this doc, to improve readability, the
+    XML examples will simply refer to the <literal>&lt;gfe&gt;</literal>
+    namespace without the namespace declaration, where possible.</para>
+  </section>
 
   <section id="bootstrap:cache">
     <title>Configuring the GemFire
@@ -29,6 +70,65 @@
 
     <para>In its simplest form, a cache can be defined in one line:</para>
 
+    <programlisting language="myxml">&lt;gfe:cache /&gt;  </programlisting>
+
+    <para>The declaration above declares an
+    object(<literal>CacheFactoryObject</literal>) for the GemFire Cache, named
+    <literal>gemfire-cache</literal>. All the other SGF components use this
+    naming convention if no name is specified, allowing for very concise
+    configurations. The definition above will try to connect to an existing
+    cache and, in case one does not exist, create it. Since no additional
+    properties were specified the created cache uses the default cache
+    configuration.Especially in environments with opened caches, this basic
+    configuration can go a long way.</para>
+
+    <para>For scenarios where the cache needs to be configured, the user can
+    pass in a reference the GemFire configuration file:</para>
+
+    <programlisting language="myxml">&lt;gfe:cache id="cache-with-xml" cache-xml-location="cache-config.xml"/&gt;</programlisting>
+
+    <para>In this example, if the cache needs to be created, it will use the
+    file named <literal>cache.xml</literal> located in the root of the runtime
+    directory. Only if the cache is created will the configuration file be
+    used.</para>
+
+    <para>In addition to referencing an external configuration file one can
+    specify GemFire settings directly through NameValueCollection
+    p<classname>roperties</classname>. This can be quite handy when just a few
+    settings need to be changed.</para>
+
+    <programlisting language="myxml">  &lt;gfe:cache id="cache-with-xml" cache-xml-location="cache-config.xml" properties-ref="props"/&gt;
+
+  &lt;object name="props" type="System.Collections.Specialized.NameValueCollection"&gt;
+    &lt;property name="['log-level']" value="warning"/&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para>Other properties that can be set in the namespace are
+    disconnect-on-close and distributed-system-name as shown below.</para>
+
+    <programlisting language="myxml">  &lt;gfe:cache disconnect-on-close="false" distributed-system-name="MySystemName"/&gt;</programlisting>
+
+    <para>The disconnect-on-close property is set to true by default. It
+    should be changed to false in case you encounter a race condition in the
+    3.0.0.5 client library that results in the disconnect call hanging the
+    application.</para>
+
+    <para>Or can use fallback to a <emphasis>raw</emphasis>
+    <literal>&lt;objects&gt;</literal> declaration:</para>
+
+    <programlisting language="myxml">  &lt;object name="cache-with-props" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"&gt;   
+    &lt;property name="Properties"&gt;
+      &lt;name-values&gt;
+        &lt;add key="log-level" value="warning"/&gt;
+      &lt;/name-values&gt;
+    &lt;/property&gt;
+  &lt;/object&gt;</programlisting>
+
+    <para xmlns="">In this last example, the SGF classes are declared and
+    configured directly without relying on the namespace. As one can tell,
+    this approach is a generic one, exposing more of the backing
+    infrastructure.</para>
+
     <programlisting language="myxml">&lt;object name="default-cache" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"/&gt;  </programlisting>
 
     <para>Here, the <emphasis>default-cache</emphasis> will try to connect to
@@ -36,7 +136,7 @@
     cache. Since no additional properties were specified the created cache
     uses the default cache configuration.</para>
 
-    <para>The name of the cache will be the name of the Spring objectd
+    <para>The name of the cache will be the name of the Spring object
     definition unless you specify a different name using the
     NameValueCollection property described next. Note, you can specify the
     name of the underlying DistributedSystem that will be created with the
@@ -83,13 +183,10 @@
     own locations. In the following example the configuration flues would come
     from a name-value configuration section in App/Web.config</para>
 
-    <programlisting language="myxml">&lt;object name="cache-with-props" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"&gt; 
-  &lt;property name="Properties"&gt;
-    &lt;name-values&gt;
-      &lt;add key="name" value="StockCache"/&gt;
-      &lt;add key="log-level" value="${cache.log-level}"/&gt;
-    &lt;/name-values&gt;
-  &lt;/property&gt;
+    <programlisting language="myxml">&lt;gfe:cache id="cache-with-props" cache-xml-location="cache-config.xml" properties-ref="props"/&gt;
+
+&lt;object name="props" type="System.Collections.Specialized.NameValueCollection"&gt;
+  &lt;property name="['log-level']" value="${cache.log-level}"/&gt;
 &lt;/object&gt;
 
 &lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
@@ -212,7 +309,7 @@
 </programlisting>
 
       <para>To register interest for a set of key, use the KeyInterest class,
-      as shown below from the sample application </para>
+      as shown below from the sample application</para>
 
       <programlisting language="myxml">  &lt;object name="Region" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"&gt;
     &lt;property name="Endpoints" value="localhost:40404"/&gt;
@@ -250,9 +347,10 @@
       &lt;/list&gt;
     &lt;/property&gt;
   &lt;/object&gt;</programlisting>
-  <para>
-  This would only register interest in keys of the type 'Key-123' or 'Key-4abc'.
-  </para>
+
+      <para>This would only register interest in keys of the type 'Key-123' or
+      'Key-4abc'.</para>
+
       <note>
         <para>For the M2 release the use of namespaces and type converters for
         'ICacheableKey' subclasses will make this configuration significantly
