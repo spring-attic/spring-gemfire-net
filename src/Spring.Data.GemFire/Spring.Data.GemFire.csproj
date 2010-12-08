@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="AllKeysInterest.cs" />
     <Compile Include="CacheFactoryObject.cs" />
+    <Compile Include="Caching\GemFireCache.cs" />
     <Compile Include="Config\CacheParser.cs" />
     <Compile Include="Config\ClientRegionParser.cs" />
     <Compile Include="Config\PoolParser.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="PoolFactoryObject.cs" />
     <Compile Include="RegexInterest.cs" />
     <Compile Include="RegionAttributesFactoryObject.cs" />
-    <Compile Include="RegionFactoryObject.cs" />
+    <Compile Include="ClientRegionFactoryObject.cs" />
     <Compile Include="RegionLookupFactoryObject.cs" />
   </ItemGroup>
   <ItemGroup>

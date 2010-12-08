@@ -15,19 +15,19 @@
     <property name="Cache" ref="Cache"/>
   </object>
   
-  <object name="basic" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire">
+  <object name="basic" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire">
     <property name="Endpoints" value="localhost:40404"/>
     <property name="Cache" ref="Cache"/>
     <property name="Name" value="basic"/>
   </object>
 
-  <object name="root" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire">
+  <object name="root" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire">
     <property name="Endpoints" value="localhost:40404"/>
     <property name="Cache" ref="Cache"/>
     <property name="Name" value="root"/>
   </object>
   
-  <object name="listeners" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"
+  <object name="listeners" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire"
           parent="baseRegion">
     <property name="CacheListener">
       <object type="Spring.Data.GemFire.Tests.SimpleCacheListener, Spring.Data.GemFire.Tests"/>
@@ -40,12 +40,8 @@
     </property>
   </object>
 
-  <object name="basic-allkey-interest" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire"
+  <object name="basic-allkey-interest" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire"
           parent="baseRegion">
-    <!-- moved to be set via RegionAttributes/Attributes property -->
-    <!--
-    <property name="ClientNotification" value="true"/>
-    -->
     <property name="Attributes">
       <object type="Spring.Data.GemFire.RegionAttributesFactoryObject, Spring.Data.GemFire">
         <property name="ClientNotification" value="true"/>

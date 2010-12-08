@@ -4,7 +4,7 @@
          default-lazy-init="true">
   
   
-	<gfe:cache properties-ref="durableProps" />
+	<gfe:cache properties-ref="durableProps"/>
 
   <object id="durableProps" type="System.Collections.Specialized.NameValueCollection">
     <property name="['durable-client-id']" value="DurableClientId"/>
@@ -16,8 +16,9 @@
     <gfe:server host="localhost" port="40404"/>    
   </gfe:pool>
 
-  <gfe:client-region id="simple" pool-name="gemfire-pool" attributes-ref="cachingProxy"/>
+  <gfe:client-region id="simple" pool-name="gemfire-pool" attributes-ref="cachingProxy" />
 
+  <!-- some common base cache configuration that can be used later in parent object referencts -->
   <object id="cachingProxy" type="Spring.Data.GemFire.RegionAttributesFactoryObject, Spring.Data.GemFire">
     <property name="ClientNotification" value="true"/>
   </object>

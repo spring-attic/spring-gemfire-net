@@ -1,3 +1,5 @@
 /_ReSharper.Spring.Data.GemFire/
 /*.Data.GemFire.5.1.ReSharper.user
 /*.Data.GemFire.suo
+/package/
+/*.Data.GemFire.sln.cache

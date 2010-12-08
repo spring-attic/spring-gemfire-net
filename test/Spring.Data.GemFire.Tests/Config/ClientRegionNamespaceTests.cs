@@ -57,15 +57,15 @@ namespace Spring.Data.GemFire.Tests.Config
         public void ComplexClient()
         {
             Assert.IsTrue(ctx.ContainsObject("complex"));           
-            RegionFactoryObject regionFactoryObject = (RegionFactoryObject) ctx.GetObject("&complex");
+            ClientRegionFactoryObject clientRegionFactoryObject = (ClientRegionFactoryObject) ctx.GetObject("&complex");
           
 
 
-            ICacheListener[] listeners = TestUtils.ReadField<ICacheListener[]>("cacheListener", regionFactoryObject);
+            ICacheListener[] listeners = TestUtils.ReadField<ICacheListener[]>("cacheListener", clientRegionFactoryObject);
             Assert.IsFalse(ObjectUtils.IsEmpty(listeners));
             Assert.AreEqual(2, listeners.Length);
             Assert.AreSame(listeners[0], ctx.GetObject("c-listener"));
-            IInterest[] ints = TestUtils.ReadField<IInterest[]>("interests",regionFactoryObject);
+            IInterest[] ints = TestUtils.ReadField<IInterest[]>("interests",clientRegionFactoryObject);
             Assert.AreEqual(3, ints.Length);
 
             // allkey interest

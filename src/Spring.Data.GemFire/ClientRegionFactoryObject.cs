@@ -37,12 +37,11 @@ namespace Spring.Data.GemFire
     /// </summary>
     /// <author>Costin Leau</author>
     /// <author>Mark Pollack (.NET)</author>
-    //TODO rename to ClientRegionFactoryObject
-    public class RegionFactoryObject : RegionLookupFactoryObject, IDisposable, IObjectFactoryAware
+    public class ClientRegionFactoryObject : RegionLookupFactoryObject, IDisposable, IObjectFactoryAware
     {
         #region Fields
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(RegionFactoryObject));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ClientRegionFactoryObject));
 
         private bool destroy;
 
@@ -182,7 +181,7 @@ namespace Spring.Data.GemFire
         /// <summary>
         /// Indented for subclasses to override and provide additional configuration of the AttributesFactory,
         /// for example setting persistence manager option is not currenlty exposed as a public property on the
-        /// RegionFactoryObject.
+        /// ClientRegionFactoryObject.
         /// </summary>
         /// <param name="attrFactory">The attributes factory.</param>
         protected virtual void PostProcessAttributes(AttributesFactory attrFactory)

@@ -28,7 +28,7 @@ namespace Spring.Data.GemFire
 {
     /// <summary>
     /// Simple FactoryObject for retrieving generic GemFire Regions. If the region doesn't exist, an exception is thrown.
-    /// For declaring and configuring new regions, see <see cref="RegionFactoryObject"/>.
+    /// For declaring and configuring new regions, see <see cref="ClientRegionFactoryObject"/>.
     /// </summary>
     /// <author>Costin Leau</author>
     /// <author>Mark Pollack (.NET)</author>

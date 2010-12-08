@@ -36,7 +36,7 @@ namespace Spring.Data.GemFire.Config
     {
         protected override Type GetObjectType(XmlElement element)
         {
-            return typeof (RegionFactoryObject);
+            return typeof (ClientRegionFactoryObject);
         }
 
 
