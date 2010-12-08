@@ -10,7 +10,7 @@
   </object>
 
   
-  <object name="Region" type="Spring.Data.GemFire.RegionFactoryObject, Spring.Data.GemFire">
+  <object name="Region" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire">
     <property name="Endpoints" value="localhost:40404"/>
     <property name="Cache" ref="Cache"/>
     <property name="Name" value="exampleregion"/>
