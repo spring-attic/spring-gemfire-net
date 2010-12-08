@@ -5,6 +5,7 @@
   <!ENTITY data                 SYSTEM "data.xml">
   <!ENTITY samples              SYSTEM "samples.xml">
   <!ENTITY links                SYSTEM "links.xml">
+  <!ENTITY appendix             SYSTEM "appendix-schema.xml">
 ]>
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -94,5 +95,16 @@
           </para>
       </partintro>
 	&links;
+    </part>
+    <part id="appendices">
+        <title>Appendices</title>
+      <partintro>
+          <para>
+              In addition to this reference documentation, there are a number of
+              other resources that may help you learn how to use GemFire and Spring framework. 
+              These additional, third-party resources are enumerated in this section.
+          </para>
+      </partintro>
+	&appendix;
     </part>
 </book>

@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Copyright 2002-2010 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<appendix id="appendix-schema" xmlns="http://docbook.org/ns/docbook" version="5">
+  <title>Spring.NET for Gemfire's <literal>spring-gemfire-1.0.xsd</literal></title>
+  <programlisting language="myxml"><![CDATA[
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="http://www.springframework.net/gemfire"
+           xmlns:objects="http://www.springframework.net"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+           targetNamespace="http://www.springframework.net/gemfire"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           vs:friendlyname="Spring.NET Gemfire Framework Configuration" vs:ishtmlschema="false" vs:iscasesensitive="true" vs:requireattributequotes="true" vs:defaultnamespacequalifier="" vs:defaultnsprefix="">
+  
+    <xs:import namespace="http://www.springframework.net"/>
+
+    <xs:annotation>
+        <xs:documentation>
+            Namespace support for the Spring GemFire project.
+        </xs:documentation>
+    </xs:annotation>
+    
+    <xs:element name="cache">
+		<xs:annotation>
+			<xs:documentation>
+Defines a GemFire Cache instance used for creating or retrieving 'regions'.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:ID" use="optional">
+				<xs:annotation>
+					<xs:documentation>
+The name of the cache definition (by default "gemfire-cache").</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="cache-xml-location" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>
+The location of the GemFire cache xml file.
+							</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+      <xs:attribute name="disconnect-on-close" type="xs:boolean" default="true" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+Indicates whether to call DistributedSystem.Disconnect when this cache is disposed.  
+There is a bug in the 3.0.0.9 client that may hang calls to close.  The default is
+true, set to false if you experience a hang in the application.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="keepalive-on-close" type="xs:boolean" default="true" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+Indicates whether to whether to keep a durable client's queue alive when this cache is closed.  
+The default is true if the cache has been configured as a durable client.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>      
+      <xs:attribute name="distributed-system-name" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+The name of the GemFire Distributed System.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="properties-ref" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>
+The object name of a NameValuesCollection object that will be used for property substitution. For loading properties
+consider using a dedicated utility such as the <util:*/> namespace and its 'properties' element.
+							</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- nested object definition -->
+	<xs:complexType name="beanDeclarationType">
+		<xs:sequence>
+			<xs:any namespace="##other" minOccurs="0" maxOccurs="1" processContents="skip">
+    			<xs:annotation>
+         			<xs:documentation>
+Inner object definition. The nested declaration serves as an alternative to object references (using 
+both in the same definition) is illegal.
+					</xs:documentation>
+				</xs:annotation>
+         	</xs:any>						
+		</xs:sequence>
+		<xs:attribute name="ref" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+The name of the object referred by this declaration. If no reference exists, use an inner object declaration.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<xs:complexType name="basicRegionType">
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>
+The id of the region object definition.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="name" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+The name of the region definition. If no specified, it will have the value of the id attribute (that is, the object name).
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="cache-ref" type="xs:string" default="gemfire-cache" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+The name of the object defining the GemFire cache (by default 'gemfire-cache').
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+    <xs:attribute name="attributes-ref" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+The object name of a RegionAttributesFactoryObject that will be used to configure detailed region properties.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>    
+	</xs:complexType> 
+	
+	
+	<xs:complexType name="readOnlyRegionType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="basicRegionType">
+				<xs:sequence>
+					<xs:element name="cache-listener" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+
+A cache listener definition for this region. A cache listener handles region or entry related events (that occur after
+various operations on the region). Multiple listeners can be declared in a nested manner.
+
+Note: Avoid the risk of deadlock. Since the listener is invoked while holding a lock on the entry generating the event,
+it is easy to generate a deadlock by interacting with the region. For this reason, it is highly recommended to use some
+other thread for accessing the region and not waiting for it to complete its task.
+							</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="skip">
+					    			<xs:annotation>
+					         			<xs:documentation>
+Inner object definition of the cache listener.
+										</xs:documentation>
+									</xs:annotation>
+					         	</xs:any>						
+							</xs:sequence>
+							<xs:attribute name="ref" type="xs:string" use="optional">
+								<xs:annotation>
+									<xs:documentation>
+The name of the cache listener object referred by this declaration. Used as a convenience method. If no reference exists, 
+use inner object declarations.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="disk-store" type="diskStoreType" minOccurs="0" maxOccurs="1">
+						<xs:annotation>
+							<xs:documentation>
+Disk storage configuration for the defined region.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>							
+				</xs:sequence>
+				<xs:attribute name="persistent" type="xs:boolean" default="false">
+					<xs:annotation>
+						<xs:documentation>
+Indicates whether the defined region is persistent or not. GemFire ensures that all the data you put into a region that
+ is configured for persistence will be written to disk in a way that it can be recovered the next time you create the 
+region. This allows data to be recovered after a machine or process failure or after an orderly shutdown and restart 
+of GemFire.
+
+Default is false, meaning the regions are not persisted.
+
+Note: Persistence for partitioned regions is supported only from GemFire 6.5 onwards.						
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="regionType">
+		<xs:complexContent>
+			<xs:extension base="readOnlyRegionType">
+				<xs:sequence minOccurs="0" maxOccurs="1">
+					<xs:element name="cache-loader" minOccurs="0"  maxOccurs="1" type="beanDeclarationType">
+						<xs:annotation>
+							<xs:documentation source="com.gemstone.gemfire.cache.CacheLoader">
+The cache loader definition for this region. A cache loader allows data to be placed into a region.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cache-writer" minOccurs="0" maxOccurs="1" type="beanDeclarationType">
+						<xs:annotation>
+							<xs:documentation source="com.gemstone.gemfire.cache.CacheWriter">
+The cache writer definition for this region. A cache writer acts as a dedicated synchronous listener that is notified
+before a region or an entry is modified. A typical example would be a writer that updates the database.
+
+Note: Only one CacheWriter is invoked. GemFire will always prefer the local one (if it exists) otherwise it will
+arbitrarily pick one.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="lookup-region" type="basicRegionType">
+		<xs:annotation>
+			<xs:documentation>[
+Looks up an existing, working, GemFire region. Typically regions are defined through GemFire own configuration, the 
+cache.xml. If the region does not exist, an exception will be thrown.
+
+For defining regions, consider the region elements.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
+	<xs:complexType name="evictionType">
+		<xs:sequence minOccurs="0" maxOccurs="1">
+			<xs:element name="object-sizer" type="beanDeclarationType">
+				<xs:annotation>
+					<xs:documentation>
+Entity computing sizes for objects stored into the grid.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="type" default="ENTRY_COUNT">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ENTRY_COUNT">
+						<xs:annotation>
+							<xs:documentation>
+Considers the number of entries in the region before performing an eviction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="MEMORY_SIZE">
+						<xs:annotation>
+							<xs:documentation>
+Considers the amount of memory consumed by the region before performing an eviction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="HEAP_PERCENTAGE">
+						<xs:annotation>
+							<xs:documentation>
+Considers the amount of heap used (through the GemFire resource manager) before performing an eviction.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="threshold" type="xs:long" use="required">
+			<xs:annotation>
+				<xs:documentation>
+The threshold (or limit) against which the eviction algorithm runs. Once the threashold is reached, eviction is
+performed.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<xs:simpleType name="evictionActionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="LOCAL_DESTROY">
+				<xs:annotation>
+					<xs:documentation>
+The LRU (least-recently-used) region entries is locally destroyed.
+
+Note: this option is not compatible with replicated regions (as it render the replica region incomplete).  
+							</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OVERFLOW_TO_DISK">
+				<xs:annotation>
+					<xs:documentation>
+The LRU (least-recently-used) region entry values are written to disk and nulled-out in the member to 
+reclaim memory.
+							</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="diskStoreType">
+		<xs:sequence>
+			<xs:element name="disk-dir" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="location" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>
+Directory on the file system for storing data.
+
+Note: the directory must already exist.						
+							</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="max-size" type="xs:int" default="10240">
+						<xs:annotation>
+							<xs:documentation>
+The maximum size (in megabytes) of data stored in each directory. Default is 10240 MB (10 gigabytes). 
+							</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="synchronous-write" type="xs:boolean" default="false">
+			<xs:annotation>
+				<xs:documentation>
+Indicates whether the writing to the disk si synchronous or not. Default is false, meaning asynchronous writing.
+				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>		
+		<xs:attribute name="auto-compact" type="xs:boolean" default="true">
+			<xs:annotation>
+				<xs:documentation>
+Indicates whether or not the operation logs are automatically compacted or not. Default is true.
+				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<!-- 
+		<xs:attribute name="compaction-threshold" default="50">
+			<xs:annotation>
+				<xs:documentation>
+Sets the threshold at which an oplog will become compactable. Until it reaches this threshold the oplog will not be 
+compacted. The threshold is a percentage in the range 0..100. When the amount of garbage in an oplog exceeds this 
+percentage then when a compaction is done this garbage will be cleaned up freeing up disk space. Garbage is created 
+by entry destroys, entry updates, and region destroys. 
+				
+				</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:short">
+					<xs:minExclusive value="0"/>
+					<xs:maxExclusive value="100"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		 -->
+		<xs:attribute name="max-oplog-size" type="xs:long" default="1024">
+			<xs:annotation>
+				<xs:documentation>
+Sets the maximum size in megabytes a single oplog (operation log) is allowed to be. When an oplog is created this 
+amount of file space will be immediately reserved. 
+				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="time-interval" type="xs:long" default="1">
+			<xs:annotation>
+				<xs:documentation>
+Sets the number of milliseconds that can elapse before unwritten data is written to disk. 
+It is considered only for asynchronous writing. 
+				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="queue-size" type="xs:long" default="0">
+			<xs:annotation>
+				<xs:documentation>
+The maximum number of operations that can be asynchronously queued. Once this many pending async operations have been 
+queued async ops will begin blocking until some of the queued ops have been flushed to disk.
+Considered only for asynchronous writing.
+				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:element name="client-region">
+		<xs:annotation>
+			<xs:documentation source="org.springframework.data.gemfire.client.ClientRegionFactoryObject">
+Defines a GemFire client region instance. A client region is connected to a (long-lived) farm of GemFire servers from
+which it receives its data. The client can hold some data locally or forward all requests to the server.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="readOnlyRegionType">
+					<xs:sequence>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="key-interest">
+								<xs:annotation>
+									<xs:documentation>
+Key based interest. If the key is a List, then all the keys in the List will be registered.
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="interestType">
+											<xs:sequence minOccurs="0" maxOccurs="1">
+												<xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="skip">
+			    									<xs:annotation>
+			         									<xs:documentation>
+Inner object definition of the client key interest.
+														</xs:documentation>
+													</xs:annotation>
+			         							</xs:any>						
+											</xs:sequence>
+											<xs:attribute name="key-ref" type="xs:string" use="optional">
+												<xs:annotation>
+													<xs:documentation>
+The name of the client key interest object referred by this declaration. Used as a convenience method. If no reference exists, 
+use the inner object declaration.
+													</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+              <xs:element name="all-keys-interest">
+                <xs:annotation>
+                  <xs:documentation>
+                    
+Register interest for all the keys of the region to get updates from the server. Valid only for a Native Client region
+when client notification is true.  
+									
+                  </xs:documentation>
+                </xs:annotation>               
+                <xs:complexType>
+                  <xs:complexContent>                    
+                    <xs:extension base="interestType">
+                    </xs:extension>
+                  </xs:complexContent>
+                </xs:complexType>
+              </xs:element>              
+							<xs:element name="regex-interest">
+								<xs:annotation>
+									<xs:documentation>
+Regular expression based interest. If the pattern is '.*' then all keys of any type will be pushed to the client. 
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:complexContent>
+										<xs:extension base="interestType">
+											<xs:attribute name="pattern" type="xs:string"/>
+										</xs:extension>
+									</xs:complexContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+						<xs:element name="eviction" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>
+Eviction policy for the partitioned region.
+								</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="evictionType">
+										<xs:attribute name="action" type="evictionActionType" default="LOCAL_DESTROY">
+											<xs:annotation>
+												<xs:documentation>
+The action to take when performing eviction.
+												</xs:documentation>
+											</xs:annotation>
+										</xs:attribute>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>						
+					</xs:sequence>
+					<xs:attribute name="pool-name" use="required" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>
+The name of the pool used by this client.
+ 							</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="connectionType">
+		<xs:attribute name="host" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>
+The host name or ip address of the connection.				
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="port">
+			<xs:annotation>
+				<xs:documentation>
+The port number of the connection (between 1 and 65535 inclusive).				
+				</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:positiveInteger">
+					<xs:minInclusive value="1"/>
+					<xs:maxInclusive value="65535"/>
+				</xs:restriction>
+			</xs:simpleType>			
+		</xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="interestType" abstract="true">
+		<xs:attribute name="durable"  type="xs:boolean" default="false" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+Indicates whether or not the registered interest is durable or not. Default is false.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="result-policy" default="KeysAndValues" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+The result policy for this interest. Can be one of 'KEYS' or 'KEYS_VALUES' (the default) or 'NONE'. 
+
+KEYS - Initializes the local cache with the keys satisfying the request.
+KEYS-VALUES - initializes the local cache with the keys and current values satisfying the request.
+NONE -  Does not initialize the local cache.
+					</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Keys"/>
+					<xs:enumeration value="KeysAndValues"/>
+					<xs:enumeration value="None"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	
+	<xs:element name="pool">
+		<xs:annotation>
+			<xs:documentation source="org.springframework.data.gemfire.client.PoolFactoryObject">
+Defines a pool for connections from a client to a set of GemFire Cache Servers.
+
+Note that in order to instantiate a pool, a GemFire cache needs to be already started.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="1" maxOccurs="1">
+				<xs:element name="locator" type="connectionType" minOccurs="1" maxOccurs="unbounded"/>
+				<xs:element name="server" type="connectionType" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:choice>
+			<xs:attribute name="id" type="xs:ID" use="optional">
+				<xs:annotation>
+					<xs:documentation>
+The name of the pool definition (by default "gemfire-pool").</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="free-connection-timeout" use="optional" type="xs:int"/>
+			<xs:attribute name="idle-timeout" use="optional" type="xs:long"/>
+			<xs:attribute name="load-conditioning-interval" use="optional" type="xs:int"/>
+			<xs:attribute name="max-connections" use="optional" type="xs:int"/>
+			<xs:attribute name="min-connections" use="optional" type="xs:int"/>
+			<xs:attribute name="ping-interval" use="optional" type="xs:long"/>
+			<xs:attribute name="read-timeout" use="optional" type="xs:int"/>
+			<xs:attribute name="retry-attempts" use="optional" type="xs:int"/>
+			<xs:attribute name="server-group" use="optional" type="xs:string"/>
+			<xs:attribute name="socket-buffer-size" use="optional" type="xs:int"/>
+			<xs:attribute name="statistic-interval" use="optional" type="xs:int"/>
+			<xs:attribute name="subscription-enabled" use="optional" type="xs:boolean"/>
+			<xs:attribute name="subscription-message-tracking-timeout" use="optional" type="xs:int"/>
+			<xs:attribute name="subscription-redundancy" use="optional" type="xs:int"/>
+			<xs:attribute name="thread-local-connections" use="optional" type="xs:boolean"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+]]></programlisting>
+</appendix>
