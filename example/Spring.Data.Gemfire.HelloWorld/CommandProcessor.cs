@@ -238,6 +238,10 @@ namespace Spring.Data.Gemfire.HelloWorld
                 if (IsMatch("get", command))
                 {
                     IGFSerializable cValue = region.Get(arg1);
+                    if (cValue == null)
+                    {
+                        return "null";
+                    }
                     return cValue.ToString();
                 }
                 if (IsMatch("remove", command))

@@ -32,7 +32,7 @@ using Spring.Util;
 namespace Spring.Data.GemFire
 {
     /// <summary>
-    /// FactoryBean for creating generic Gemfire Regio. Will try to first locate the region (by name)
+    /// FactoryObject for creating generic Gemfire Region. Will try to first locate the region (by name)
     /// and, in case none if found, proceed to creating one using the given settings. 
     /// </summary>
     /// <author>Costin Leau</author>
@@ -104,64 +104,76 @@ namespace Spring.Data.GemFire
             {
                 if (interest is RegexInterest)
                 {
-                    RegexInterest regexInterest = (RegexInterest) interest;
-                    if (interest.Policy == InterestResultPolicy.None)
+                    try
                     {
-                        region.RegisterRegex(regexInterest.Regex, interest.Durable);
-                    }
-                    else if (interest.Policy == InterestResultPolicy.Keys)
-                    {
-                        region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>());
-                    }
-                    else if (interest.Policy == InterestResultPolicy.KeysAndValues)
-                    {
-                        bool isConnected = DistributedSystem.IsConnected;
-                        //TODO how to make the list of keys be made accessible to client code, post an application context event?
-                        try
+                        RegexInterest regexInterest = (RegexInterest) interest;
+                        if (interest.Policy == InterestResultPolicy.None)
+                        {
+                            region.RegisterRegex(regexInterest.Regex, interest.Durable);
+                        }
+                        else if (interest.Policy == InterestResultPolicy.Keys)
                         {
                             region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>());
-                        } catch (Exception e)
-                        {
-                            log.Error("couldn't register regex", e);
                         }
+                        else if (interest.Policy == InterestResultPolicy.KeysAndValues)
+                        {
+                            //TODO How to make the list of keys be made accessible to client code..?
+                            //     Have the List<ICacheableKey> come from the container.
+                            region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>());                                                       
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("Couldn't register regex interest [" + interest + "]", e);
+                        throw;
                     }
                 }
                 else if (interest is KeyInterest)
                 {
-                    KeyInterest keyInterest = (KeyInterest) interest;
-                    if (keyInterest.Policy == InterestResultPolicy.None)
+                    try
                     {
-                        region.RegisterKeys(keyInterest.Keys);
+                        KeyInterest keyInterest = (KeyInterest) interest;
+                        if (keyInterest.Policy == InterestResultPolicy.None)
+                        {
+                            region.RegisterKeys(keyInterest.Keys);
+                        }
+                        else if (interest.Policy == InterestResultPolicy.Keys)
+                        {
+                            region.RegisterKeys(keyInterest.Keys, keyInterest.Durable, false);
+                        }
+                        else if (interest.Policy == InterestResultPolicy.KeysAndValues)
+                        {
+                            region.RegisterKeys(keyInterest.Keys, keyInterest.Durable, true);
+                        }
                     }
-                    else if (interest.Policy == InterestResultPolicy.Keys)
+                    catch (Exception e)
                     {
-                        region.RegisterKeys(keyInterest.Keys, keyInterest.Durable, false);
-                    }
-                    else if (interest.Policy == InterestResultPolicy.KeysAndValues)
-                    {
-                        region.RegisterKeys(keyInterest.Keys, keyInterest.Durable, true);
+                        log.Error("Couldn't register key interest [" + interest + "]", e);
+                        throw;
                     }
                 }
-                else
+                else // AllKeysInterest
                 {
-                    if (interest.Policy == InterestResultPolicy.None)
+                    try
                     {
-                        region.RegisterAllKeys(interest.Durable);
-                    }
-                    else if (interest.Policy == InterestResultPolicy.Keys)
-                    {
-                        region.RegisterAllKeys(interest.Durable, new List<ICacheableKey>(), false);
-                    }
-                    else if (interest.Policy == InterestResultPolicy.KeysAndValues)
-                    {
-                        try
+                        if (interest.Policy == InterestResultPolicy.None)
                         {
-                            region.RegisterAllKeys(interest.Durable, new List<ICacheableKey>(), true);
+                            region.RegisterAllKeys(interest.Durable);
                         }
-                        catch (Exception ex)
+                        else if (interest.Policy == InterestResultPolicy.Keys)
                         {
-                            log.Warn("could not register interest in keys", ex);
+                            //TODO have the List<ICacheableKey> come from the container
+                            region.RegisterAllKeys(interest.Durable, new List<ICacheableKey>(), false);
                         }
+                        else if (interest.Policy == InterestResultPolicy.KeysAndValues)
+                        {
+                            region.RegisterAllKeys(interest.Durable, new List<ICacheableKey>(), true);                                                       
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("Couldn't register all keys interest [" + interest + "]", e);
+                        throw;
                     }
                 }
             }
@@ -217,7 +229,7 @@ namespace Spring.Data.GemFire
         /// Subclasses can override this method to further customize the Region configuration.
         /// </summary>
         /// <remarks>
-        /// Post-process the region object for this factory bean during the initialization process.
+        /// Post-process the region object for this factory object during the initialization process.
         /// The object is already initialized and configured by the factory object before this method
         /// is invoked.
         /// </remarks>

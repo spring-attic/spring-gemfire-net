@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Threading;
 using GemStone.GemFire.Cache;
 using NUnit.Framework;
 using Spring.Context;
@@ -98,25 +99,38 @@ namespace Spring.Data.GemFire.Tests
         {
             // 1. Connect to system
             Console.WriteLine("{0}Connecting to GemFire", Environment.NewLine);
-            DistributedSystem dsys = DistributedSystem.Connect("exampleregion");
+            DistributedSystem dsys = DistributedSystem.Connect("exampleregion2");
 
             // 2. Create a cache
-            Cache cache = CacheFactory.Create("exampleregion", dsys);
+            Cache cache = CacheFactory.Create("exampleregion2", dsys);
+
+
+            // 2.5 Create Pool
+            //PoolFactory fact = PoolManager.CreateFactory();
+            //fact.AddServer("localhost", 40404);
+            //fact.SetSubscriptionEnabled(true);
+            //fact.Create("examplePool");
+            
+
 
             // 3. Create default region attributes
             AttributesFactory af = new AttributesFactory();
             af.SetClientNotificationEnabled(true);
+
+            //af.SetPoolName("examplePool");
             
             af.SetEndpoints("localhost:40404");
             RegionAttributes rAttrib = af.CreateRegionAttributes();
 
             // 4. Create region
-            //Region region = cache.CreateRegion("exampleregion", rAttrib);
+            Region region = cache.CreateRegion("exampleregion2", rAttrib);
+            Thread.Sleep(1000);
+            region.RegisterRegex("Keys-*", false, null, false);
 
-            RegionFactory regionFact = cache.CreateRegionFactory(RegionShortcut.CACHING_PROXY);            
-            Region region = regionFact.Create("exampleregion");
-
-            region.RegisterRegex("Keys-*", false, null, true);
+            //RegionFactory regionFact = cache.CreateRegionFactory(RegionShortcut.CACHING_PROXY);            
+            //Region region = regionFact.Create("exampleregion");
+                       
+            
             //region.RegisterRegex(".*", false, new System.Collections.Generic.List<ICacheableKey>());
         }
 

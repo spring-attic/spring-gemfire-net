@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+         xmlns:gfe="http://www.springframework.net/gemfire"
+         default-lazy-init="true">
+  
+  
+	<gfe:cache properties-ref="durableProps" />
+
+  <object id="durableProps" type="System.Collections.Specialized.NameValueCollection">
+    <property name="['durable-client-id']" value="DurableClientId"/>
+    <property name="['durable-timeout']" value="300"/>
+  </object>
+
+  <!-- NOTE Register regex is supported only if pool subscription-enabled attribute is true, was set to false in Java -->
+  <gfe:pool id="gemfire-pool" subscription-enabled="true">
+    <gfe:server host="localhost" port="40404"/>    
+  </gfe:pool>
+
+  <gfe:client-region id="simple" pool-name="gemfire-pool" attributes-ref="cachingProxy"/>
+
+  <object id="cachingProxy" type="Spring.Data.GemFire.RegionAttributesFactoryObject, Spring.Data.GemFire">
+    <property name="ClientNotification" value="true"/>
+  </object>
+
+  <object id="myCustomRegionAttributes" 
+          parent="cachingProxy"
+          type="Spring.Data.GemFire.RegionAttributesFactoryObject, Spring.Data.GemFire">
+    <property name="LruEntriesLimit" value="1234"/>
+  </object>
+
+  <gfe:client-region id="empty" pool-name="gemfire-pool" name="publisher"/>
+
+  <gfe:client-region id="complex" pool-name="gemfire-pool">    
+    <gfe:cache-listener>      
+      <ref object="c-listener"/>
+      <object type="Spring.Data.GemFire.Tests.SimpleCacheListener, Spring.Data.GemFire.Tests"/>
+    </gfe:cache-listener>
+
+    <gfe:all-keys-interest durable="true" result-policy="Keys"/>
+    
+    <gfe:key-interest result-policy="KeysAndValues" key-ref="cacheableString"/>
+
+    <!-- NOTE Register regex is supported only if pool subscription-enabled attribute is true. -->
+    <gfe:regex-interest pattern=".*"/>    
+
+  </gfe:client-region>
+
+  <object id="cacheableString" type="GemStone.GemFire.Cache.CacheableString, GemStone.GemFire.Cache">
+    <constructor-arg index="0" value="hello"/>
+  </object>
+  
+  <object id="c-listener" type="Spring.Data.GemFire.Tests.SimpleCacheListener, Spring.Data.GemFire.Tests"/>
+
+
+  
+</objects>

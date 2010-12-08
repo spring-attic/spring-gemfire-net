@@ -1,0 +1,27 @@
+﻿<project SchemaVersion="1.3">
+	<assemblies>
+		<assembly location=".\src\Spring.Data.GemFire\bin\Debug\Spring.Data.GemFire.dll" documentation=".\src\Spring.Data.Gemfire\bin\Debug\Spring.Data.Gemfire.xml" />
+	</assemblies>
+	<summaries basedir=".\doc\api">
+	  <include name="NamespaceSummaryXXX.xml" />
+	</summaries>
+	<documenters>
+		<documenter name="MSDN">
+			<property name="OutputDirectory" value=".\doc\api\target\msdn\" />
+			<property name="HtmlHelpName" value="Spring GemFire 1.0 M1" />
+			<property name="Title" value="Spring GemFire 1.0 M1 API Reference" />
+			<property name="OutputTarget" value="HtmlHelpAndWeb" />
+			<property name="ShowVisualBasic" value="True" />
+			<property name="MergeAssemblies" value="False" />
+			<property name="RootPageTOCName" value="Introduction" />
+			<property name="RootPageFileName" value="./doc/api/introduction.html" />
+			<property name="ShowMissingSummaries" value="True" />
+			<property name="DocumentSealedProtected" value="True" />
+			<property name="AssemblyVersionInfo" value="AssemblyVersion" />
+			<property name="CopyrightText" value="© SpringSource 2010. All Rights Reserved." />
+			<property name="FeedbackEmailAddress" value="mpollack@vmware.com" />
+			<property name="UseNamespaceDocSummaries" value="True" />
+			<property name="SdkDocVersionString" value="VS.80" />
+		</documenter>
+	</documenters>
+</project>

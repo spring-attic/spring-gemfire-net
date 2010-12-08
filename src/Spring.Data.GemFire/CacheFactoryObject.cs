@@ -63,6 +63,8 @@ namespace Spring.Data.GemFire
 
         private bool disconnectOnClose = true;
 
+        private bool keepAliveOnClose = true;
+
         private DistributedSystem system;
         private NameValueCollection properties;
         private string cacheXml;
@@ -110,6 +112,17 @@ namespace Spring.Data.GemFire
             set { disconnectOnClose = value; }
         }
 
+
+        /// <summary>
+        /// Sets a value indicating whether to call cache.close(keepalive) which determines
+        /// whether to keep a durable client's queue alive.
+        /// </summary>
+        /// <value><c>true</c> call keep alive on close; otherwise, <c>false</c>.</value>
+        public bool KeepAliveOnClose
+        {
+            set { keepAliveOnClose = value; }
+        }
+
         #endregion
 
         /// <summary>
@@ -148,6 +161,15 @@ namespace Spring.Data.GemFire
             }
             
             log.Info(msg + " GemFire v." + CacheFactory.Version + " Cache ['" + cache.Name + "']");
+            
+        }
+
+        protected bool IsDurableClient
+        {
+            get
+            {
+                return (properties != null && properties["durable-client-id"] != null);
+            }           
         }
 
         private Properties MergePropertes()
@@ -163,12 +185,7 @@ namespace Spring.Data.GemFire
                         this.name = properties[key];
                     }
                 }
-            }
-            /*
-            if (StringUtils.HasText(name))
-            {
-                gemfirePropertes.Insert("name", name.Trim());
-            }*/
+            }            
             return gemfirePropertes;
         }
 
@@ -179,7 +196,14 @@ namespace Spring.Data.GemFire
         {
             if (cache != null && !cache.IsClosed)
             {
-                cache.Close();
+                if (IsDurableClient)
+                {
+                    log.Info("Closing durable client with keepalive = " + keepAliveOnClose);
+                    cache.Close(keepAliveOnClose);
+                } else
+                {
+                    cache.Close();
+                }
             }
             cache = null;
 

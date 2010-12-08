@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net" 
+         xmlns:gfe="http://www.springframework.net/gemfire"
+         default-lazy-init="true">
+  
+	<gfe:cache />
+
+	<gfe:cache id="cache-with-name"/>
+
+
+  <gfe:cache id="cache-with-xml" cache-xml-location="cache-config.xml" properties-ref="props"/>
+
+  <object name="props" type="System.Collections.Specialized.NameValueCollection">
+    <property name="['log-level']" value="warning"/>
+  </object>
+
+  <gfe:cache disconnect-on-close="true" distributed-system-name="MySystemName"/>
+
+
+  <gfe:cache id="simple"/>
+  
+  <gfe:lookup-region id="lookup" name="simple"/>
+  
+</objects>
