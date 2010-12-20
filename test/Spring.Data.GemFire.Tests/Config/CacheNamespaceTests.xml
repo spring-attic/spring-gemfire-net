@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects xmlns="http://www.springframework.net" 
          xmlns:gfe="http://www.springframework.net/gemfire"
-         default-lazy-init="true">
+         >
   
 	<gfe:cache />
 
@@ -18,6 +18,7 @@
 
 
   <gfe:cache id="simple"/>
+  
   
   <gfe:lookup-region id="lookup" name="simple"/>
   

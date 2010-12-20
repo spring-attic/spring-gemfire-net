@@ -70,7 +70,7 @@
     shown below, it is backed by a simple dictionary, but in a real world
     scenario it would be backed by a database.</para>
 
-    <programlisting language="myxml">    [Serializable]
+    <programlisting language="csharp">    [Serializable]
     [Repository]
     public sealed class InventorRepository : IInventorRepository
     {
@@ -123,7 +123,7 @@
     shown below. Inventors have the <literal>[Serializable]</literal>
     attribute applies to them.</para>
 
-    <programlisting language="myxml">    public interface IInventorRepository
+    <programlisting language="csharp">    public interface IInventorRepository
     {
         IList GetAll();
         IList GetAllNoCacheKey();

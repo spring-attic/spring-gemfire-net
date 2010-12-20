@@ -23,7 +23,7 @@ using System.Security.Permissions;
 [assembly: AssemblyTrademarkAttribute("Apache License, Version 2.0")]
 [assembly: AssemblyCultureAttribute("")]
 [assembly: AssemblyVersionAttribute("1.0.0.355")]
-[assembly: AssemblyConfigurationAttribute("net-3.5.win32; dev")]
-[assembly: AssemblyInformationalVersionAttribute("1.0.0.355; net-3.5.win32; dev")]
+[assembly: AssemblyConfigurationAttribute("net-3.5.win32; release")]
+[assembly: AssemblyInformationalVersionAttribute("1.0.0.355; net-3.5.win32; release")]
 [assembly: AssemblyDelaySignAttribute(false)]
 
