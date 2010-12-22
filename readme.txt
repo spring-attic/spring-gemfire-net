@@ -1,15 +1,17 @@
-THE Spring Gemfire project for .NET, Release 1.0.0 M1 (August 3rd, 2010)
+THE Spring Gemfire project for .NET, Release 1.0.0 M2 (December 10, 2010)
 --------------------------------------------------------------------
 http://www.springsource.org/spring-gemfire
 
 
 1. INTRODUCTION
 
-The 1.0.0 M1 release of Spring Gemfire for .NET contains
+The 1.0.0 M2 release of Spring Gemfire for .NET contains
 
      * IoC configuration of Cache, Regions, and associated CacheLoaders, CacheListener, and CacheWriters
      * Exception translation of GemFire exceptions into Spring's DAO exception hierarchy for use with Spring's
        PersistenceExceptionTranslationPostProcessor.
+     * Namespace support for configuration of Cache and Regions
+     * Support for Spring.NET Cache advice
 
 2. SUPPORTED .NET FRAMEWORK VERSIONS
 
@@ -44,9 +46,9 @@ Spring Gemfire for .NET is released under the terms of the Apache Software Licen
 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
-- "Spring.Data.Gemfire" (~20 KB)
+- "Spring.Data.Gemfire" (~60 KB)
 - Contents: IoC configuration of Cache, Regions, and associated CacheLoaders, CacheListener, and CacheWriters
-- Dependencies: Spring.Core, Common.Logging
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data,  Common.Logging
 
 6. WHERE TO START?
 

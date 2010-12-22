@@ -2,6 +2,22 @@ SPRING GEMFIRE FOR .NET CHANGELOG
 =================================
 http://springsource.org/spring-gemfire
 
+Release Version 1.0.0 M2 December 10, 2010
+
+Release Notes - Spring Gemfire for .NET - Version 1.0.0 M2
+
+New Feature
+[SGFNET-9] - Caching Advice
+[SGFNET-10] - Custom Spring namespace for cache/regions
+[SGFNET-12] - Add option to close the cache with keepalive option
+[SGFNET-13] - Create RegionAttributesFactoryObject for easy DI style setting of RegionAttributes
+[SGFNET-15] - Create simple region lookup factory object
+
+Task
+[SGFNET-14] - Update documentation to include namespace support
+
+--------------------
+
 Release Version 1.0.0 M1 August 3, 2010
 
 Release Notes - Spring Gemfire for .NET - Version 1.0.0 M1
