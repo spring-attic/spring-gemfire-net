@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2009 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,11 @@ using GemStone.GemFire.Cache;
 using Spring.Caching;
 
 namespace Spring.Data.GemFire.Caching {
+
     /// <summary>
     /// Cache implementation for Gemfire
     /// </summary>
-    /// <author></author>
+    /// <author>Mark Pollack</author>
     public class GemFireCache : AbstractCache
     {
         private Region region;
@@ -80,11 +81,6 @@ namespace Spring.Data.GemFire.Caching {
         protected override void DoInsert(object key, object value, TimeSpan timeToLive)
         {
             
-            /*
-            if (key.GetType().IsSerializable == false)
-            {
-                throw new ArgumentException(String.Format("The key type [{0}] is not Serializable", key.GetType()));
-            }*/
             string coKey = GetCachableKey(key);
             if (value.GetType().IsSerializable == false)
             {

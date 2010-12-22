@@ -5,7 +5,6 @@
          xmlns:ns3="http://www.w3.org/1998/Math/MathML"
          xmlns:ns2="http://www.w3.org/1999/xlink"
          xmlns:ns="http://docbook.org/ns/docbook">
-
   <title>Bootstrapping GemFire through the Spring container</title>
 
   <para>One of the first tasks when using GemFire and Spring is to configure
@@ -56,7 +55,27 @@
 
     <para>For the remainder of this doc, to improve readability, the XML
     examples will simply refer to the <literal>&lt;gfe&gt;</literal> namespace
-    without the namespace declaration, where possible.</para>
+    without the namespace declaration, where possible. To enable Spring.NET to
+    recognize this namespace you need to register it in the applications
+    App.config section.</para>
+
+    <programlisting language="myxml">&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;   
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Data.GemFire.Config.GemfireNamespaceParser, Spring.Data.GemFire" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;
+    </programlisting>
   </section>
 
   <section id="bootstrap:cache">
@@ -360,7 +379,7 @@
 
       <para>The use of Spring's parent referent allows you set setup commonly
       used configurations and then extend them by overriding or adding
-      additional properties. </para>
+      additional properties.</para>
 
       <para>For a full list of options to set on the client and especially on
       the pool, please refer to the SGF schema (<xref
@@ -420,7 +439,7 @@
 
     <para>Since the region object definition name is usually the same with
     that of the cache, the <literal>name</literal> property can be omitted
-    (the object name will be used automatically). </para>
+    (the object name will be used automatically).</para>
 
     <programlisting language="myxml">&lt;!-- shared cache across regions --&gt;
 &lt;object id="cache" type="Spring.Data.GemFire.CacheFactoryObject, Spring.Data.GemFire"/&gt; 
@@ -505,7 +524,7 @@
       <para>This example makes use of Spring's object configuration
       inheritance allowing you to place common configuration in the baseRegion
       object definition and then refer to it later via the
-      <literal>parent</literal> attribute. </para>
+      <literal>parent</literal> attribute.</para>
 
       <para>Users that need fine control over a region, can configure it in
       Spring by using the <literal>Attributes</literal> property. To ease

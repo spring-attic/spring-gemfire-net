@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5" xml:id="cacheadvice"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Using Caching Advice with GemFire</title>
+
+  <para>An implementation of Spring.NET's
+  <interfacename>ICache</interfacename> interface is provided. You can read
+  about the features of Spring.NET Caching advice <link ns6:arcrole=""
+  ns6:href="http://www.springframework.net/doc-latest/reference/html/aop-aspect-library.html#caching-aspect">here</link>.
+  In this documentation we will show a basic configuration of the caching
+  advice.</para>
+
+  <section>
+    <title>Caching Advice</title>
+
+    <para>The caching advice allows you to use string values as the keys and a
+    GemFire .NET serialized objects as the values. To apply the Gemfire
+    Caching advice you need to create an object definition for
+    <classname>Spring.Data.GemFire.Caching.GemFireCache</classname> and pass a
+    reference to a GemFire region in the constructor. In this example, the
+    caching advice is being applied to a data access repository for Inventors.
+    The inventors The repository is identified as a candidate to apply caching
+    advice through the use of <literal>[Repository]
+    </literal>attribute.</para>
+
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
+         xmlns:gfe="http://www.springframework.net/gemfire"&gt;
+
+  &lt;object id="inventorstore" type="Spring.Data.GemFire.Tests.InventorRepository, Spring.Data.GemFire.Tests"/&gt;
+
+  &lt;!-- the ID matches the name used in the [Cache] attribute --&gt;
+  &lt;object id="inventors" type="Spring.Data.GemFire.Caching.GemFireCache, Spring.Data.GemFire"&gt;
+    &lt;constructor-arg ref="exampleregion"/&gt;
+  &lt;/object&gt;
+
+  &lt;!-- Defines multiple Advisors for Caching - the CacheResultAdvisor, CacheParameterAdvisor, and InvalidateCacheAdvisor--&gt;
+  &lt;object id="CacheAspect" type="Spring.Aspects.Cache.CacheAspect, Spring.Aop"/&gt;
+
+
+  &lt;!-- The AutoProxy based on attributes to apply the advisors defined in the CacheAspect --&gt;
+  &lt;object type="Spring.Aop.Framework.AutoProxy.AttributeAutoProxyCreator, Spring.Aop"&gt;
+    &lt;!-- AttributeTypes selects the classes that have the RepositoryAttribute at the class level--&gt;
+    &lt;property name="AttributeTypes" value="Spring.Stereotype.RepositoryAttribute"/&gt;
+    &lt;!-- Interceptor names can be either of the type IAdvice, IAdvisor, or IAdvisors --&gt;
+    &lt;!-- The CacheAspect is of the type IAdvisors --&gt;
+    &lt;property name="InterceptorNames" value="CacheAspect"/&gt;
+  &lt;/object&gt;
+  
+  
+  &lt;!-- default name is gemfire-cache --&gt;
+  &lt;gfe:cache/&gt;
+
+  &lt;gfe:pool id="gemfire-pool" subscription-enabled="true"&gt;
+    &lt;gfe:server host="localhost" port="40404"/&gt;    
+  &lt;/gfe:pool&gt;
+
+  &lt;gfe:client-region id="exampleregion" pool-name="gemfire-pool"  /&gt;
+  
+&lt;/objects&gt;</programlisting>
+
+    <para>Spring's CacheAspect class implements the IAdvisors interface, so
+    that it can define multiple IAdvisors, one for each of the attributes used
+    in the caching advice: [<literal>CacheResult], [CacheParameter]</literal>
+    and <literal>[InvalidateCache]</literal>. The InventorRepository class is
+    shown below, it is backed by a simple dictionary, but in a real world
+    scenario it would be backed by a database.</para>
+
+    <programlisting language="myxml">    [Serializable]
+    [Repository]
+    public sealed class InventorRepository : IInventorRepository
+    {
+        private IDictionary inventors = new ListDictionary();
+
+        public InventorRepository()
+        {
+            Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), null);
+            Inventor pupin = new Inventor("Mihajlo Pupin", new DateTime(1854, 10, 9), null);
+            inventors.Add("Nikola Tesla", tesla);
+            inventors.Add("Mihajlo Pupin", pupin);
+        }
+
+        [CacheResultItems("inventors", "Name")]
+        public IList GetAll()
+        {
+            return new ArrayList(inventors.Values);
+        }
+
+
+        [CacheResult(CacheName = "inventors")]
+        public IList GetAllNoCacheKey()
+        {
+            return new ArrayList(inventors.Values);
+        }
+
+        [CacheResult("inventors", "#name")]
+        public Inventor Load(string name)
+        {
+            return (Inventor)inventors[name];
+        }
+
+        public void Save([CacheParameter("inventors", "Name")] Inventor inventor)
+        {
+            inventor.Nationality = "Serbian";
+        }
+
+        [InvalidateCache("inventors", Keys = "#inventor.Name")]
+        public void Delete(Inventor inventor)
+        {
+        }
+
+        [InvalidateCache("inventors")]
+        public void DeleteAll()
+        {
+        }
+    }</programlisting>
+
+    <para>The <interfacename>IInventorRepository</interfacename> interface is
+    shown below. Inventors have the <literal>[Serializable]</literal>
+    attribute applies to them.</para>
+
+    <programlisting language="myxml">    public interface IInventorRepository
+    {
+        IList GetAll();
+        IList GetAllNoCacheKey();
+        Inventor Load(string name);
+        void Save(Inventor inventor);
+        void Delete(Inventor inventor);
+        void DeleteAll();
+    }</programlisting>
+  </section>
+</chapter>

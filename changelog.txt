@@ -2,6 +2,15 @@ SPRING GEMFIRE FOR .NET CHANGELOG
 =================================
 http://springsource.org/spring-gemfire
 
+
+Release Version 1.0.0 RC1 December 22, 2010
+
+Release Notes - Spring Gemfire for .NET - Version 1.0.0 RC1
+
+
+
+--------------------
+
 Release Version 1.0.0 M2 December 10, 2010
 
 Release Notes - Spring Gemfire for .NET - Version 1.0.0 M2

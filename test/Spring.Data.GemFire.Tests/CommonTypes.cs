@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using Spring.Caching;
+using Spring.Stereotype;
 
 namespace Spring.Data.GemFire.Tests
 {
@@ -120,7 +121,7 @@ namespace Spring.Data.GemFire.Tests
         }
     }
 
-    public interface IInventorStore
+    public interface IInventorRepository
     {
         IList GetAll();
         IList GetAllNoCacheKey();
@@ -132,11 +133,12 @@ namespace Spring.Data.GemFire.Tests
 
     //NOTE Serializable added for Gemfire
     [Serializable]
-    public sealed class InventorStore : IInventorStore
+    [Repository]
+    public sealed class InventorRepository : IInventorRepository
     {
         private IDictionary inventors = new ListDictionary();
 
-        public InventorStore()
+        public InventorRepository()
         {
             Inventor tesla = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), null);
             Inventor pupin = new Inventor("Mihajlo Pupin", new DateTime(1854, 10, 9), null);

@@ -18,7 +18,7 @@
     <xsd:element name="cache">
 		<xsd:annotation>
 			<xsd:documentation><![CDATA[
-Defines a GemFire Cache instance used for creating or retrieving 'regions'.
+Defines a GemFire Cache instance used for creating or retrieving 'regions'.  Default name is gemfire-cache.
 			]]></xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>

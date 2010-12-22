@@ -2,6 +2,7 @@
 <!DOCTYPE book  [
   <!ENTITY preface              SYSTEM "preface.xml">
   <!ENTITY bootstrap            SYSTEM "bootstrap.xml">
+  <!ENTITY cacheadvice          SYSTEM "cacheadvice.xml">
   <!ENTITY data                 SYSTEM "data.xml">
   <!ENTITY samples              SYSTEM "samples.xml">
   <!ENTITY links                SYSTEM "links.xml">
@@ -16,7 +17,7 @@
     <bookinfo>
       <title>Spring Gemfire for .NET - Reference Documentation
       </title>
-      <releaseinfo>1.0.0 M2
+      <releaseinfo>1.0.0 RC1
       </releaseinfo>
 
         <authorgroup>
@@ -83,6 +84,7 @@
 </partintro>
 	&bootstrap;
 	&data;
+        &cacheadvice;
 	&samples;
     </part>
     <part id="resources">

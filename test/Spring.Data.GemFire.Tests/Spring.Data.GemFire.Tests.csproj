@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheIntegrationTests.cs" />
+    <Compile Include="Caching\AbstractGemfireCacheTests.cs" />
     <Compile Include="Caching\GemfireCacheTests.cs" />
+    <Compile Include="Caching\XmlBasedGemfireCacheTests.cs" />
     <Compile Include="CommonTypes.cs" />
     <Compile Include="Config\CacheNamespaceTests.cs">
     </Compile>
@@ -89,6 +91,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="CacheIntegrationTests.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Caching\XmlBasedGemfireCacheTests.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Config\CacheNamespaceTests.xml">
