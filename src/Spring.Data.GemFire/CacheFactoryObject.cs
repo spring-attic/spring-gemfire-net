@@ -133,9 +133,13 @@ namespace Spring.Data.GemFire
         {
             AssertUtils.ArgumentNotNull("name", name, "Cache name can not be null");
             Properties gemfirePropertes = MergePropertes();
+            if (DistributedSystem.IsConnected)
+            {
+                DistributedSystem.Disconnect();
+            }
             system = DistributedSystem.Connect(distributedSystemName, gemfirePropertes);
-
             log.Info("Connected to Distributed System [" + system.Name + "]");
+            
 
             // first look for open caches
             String msg = null;
