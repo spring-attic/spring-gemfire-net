@@ -112,12 +112,12 @@ namespace Spring.Data.GemFire
                         }
                         else if (interest.Policy == InterestResultPolicy.Keys)
                         {
-                            region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>());
+                            region.RegisterRegex(regexInterest.Regex, interest.Durable, null, false);                                                          
                         }
                         else if (interest.Policy == InterestResultPolicy.KeysAndValues)
                         {
                             //TODO How to make the list of keys be made accessible to client code..?
-                            //     Have the List<ICacheableKey> come from the container.
+                            //     Have the List<ICacheableKey> come from the container.                            
                             region.RegisterRegex(regexInterest.Regex, interest.Durable, new List<ICacheableKey>());                                                       
                         }
                     }

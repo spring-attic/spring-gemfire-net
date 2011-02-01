@@ -43,6 +43,7 @@ namespace Spring.Data.GemFire.Config
             base.DoParse(element, builder);
             ParsingUtils.SetPropertyValue(element, builder, "name", "name");
             String attr = element.GetAttribute("cache-ref");
+            // add cache reference (fallback to default if nothing is specified)
             builder.AddPropertyReference("cache", (StringUtils.HasText(attr) ? attr : "gemfire-cache"));            
         }
     }

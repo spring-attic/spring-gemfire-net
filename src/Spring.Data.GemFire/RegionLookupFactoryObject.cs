@@ -55,14 +55,20 @@ namespace Spring.Data.GemFire
             }
             // fall back to cache creation if one is not found
             else
-            {
+            {            
                 region = LookupFallback(cache, name);
             }
         }
 
         protected virtual Region LookupFallback(Cache cacheObject, string regionName)
         {
-            throw new ObjectInitializationException("Cannot find region named " + regionName + " in cache " + cacheObject);
+            log.Error("Could not find existing region with name [" + name + "]");    
+            Region[] regions = cacheObject.RootRegions();
+            foreach (Region r in regions)
+            {
+                log.Info("Existing region = " + r);
+            }               
+            throw new ObjectInitializationException("Cannot find region [ " + regionName + "] in cache " + cacheObject);
         }
 
         public object GetObject()

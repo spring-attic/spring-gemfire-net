@@ -90,19 +90,20 @@ namespace Spring.Data.GemFire.Tests
         [Test]
         public void RegionWithAllKeyInterest()
         {
-            Region region = (Region)ctx.GetObject("basic-allkey-interest");
-            Assert.AreEqual("basic-allkey-interest", region.Name);
+            Region region = (Region)ctx.GetObject("empty");
+            Assert.AreEqual("empty", region.Name);
         }
 
         [Test]
+        [Ignore("For API experimentation")]
         public void RegisterRegexInterest()
         {
             // 1. Connect to system
             Console.WriteLine("{0}Connecting to GemFire", Environment.NewLine);
-            DistributedSystem dsys = DistributedSystem.Connect("exampleregion2");
+            DistributedSystem dsys = DistributedSystem.Connect("empty");
 
             // 2. Create a cache
-            Cache cache = CacheFactory.Create("exampleregion2", dsys);
+            Cache cache = CacheFactory.Create("Cache", dsys);
 
 
             // 2.5 Create Pool
@@ -120,10 +121,10 @@ namespace Spring.Data.GemFire.Tests
             //af.SetPoolName("examplePool");
             
             af.SetEndpoints("localhost:40404");
-            RegionAttributes rAttrib = af.CreateRegionAttributes();
+            RegionAttributes rAttrib = af.CreateRegionAttributes();            
 
             // 4. Create region
-            Region region = cache.CreateRegion("exampleregion2", rAttrib);
+            Region region = cache.CreateRegion("empty", rAttrib);
             Thread.Sleep(1000);
             region.RegisterRegex("Keys-*", false, null, false);
 
@@ -135,6 +136,7 @@ namespace Spring.Data.GemFire.Tests
         }
 
         [Test]
+        [Ignore("For API experimentation")]
         public void NewAPI()
         {
             // 1. Create a cache

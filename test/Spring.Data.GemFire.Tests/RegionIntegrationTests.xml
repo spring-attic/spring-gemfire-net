@@ -40,7 +40,7 @@
     </property>
   </object>
 
-  <object name="basic-allkey-interest" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire"
+  <object name="empty" type="Spring.Data.GemFire.ClientRegionFactoryObject, Spring.Data.GemFire"
           parent="baseRegion">
     <property name="Attributes">
       <object type="Spring.Data.GemFire.RegionAttributesFactoryObject, Spring.Data.GemFire">
@@ -49,18 +49,16 @@
     </property>
     <property name="interests">
       <list>
-        <!--
+        
         <object type="Spring.Data.GemFire.AllKeysInterest, Spring.Data.GemFire"/>
-        -->
+        
         <!-- Register regex is supported only if region client-notification attribute is true. -->
-        <!--
+        
         <object type="Spring.Data.GemFire.RegexInterest, Spring.Data.GemFire">
-          <property name="Regex" value=".*"/>
+          <property name="Regex" value="Keys-*"/>
           <property name="Policy" value="Keys"/>
           <property name="Durable" value="false"/>
-        </object>
-        -->
-        
+        </object>                
       </list>
     </property>
   </object>
