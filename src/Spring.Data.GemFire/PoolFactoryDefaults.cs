@@ -21,7 +21,7 @@
 namespace Spring.Data.GemFire
 {
     /// <summary>
-    ///  
+    /// Static value for default values of the Pool 
     /// </summary>
     /// <author>Mark Pollack</author>
     public abstract class PoolFactoryDefaults

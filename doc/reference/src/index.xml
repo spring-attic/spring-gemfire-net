@@ -17,7 +17,7 @@
     <bookinfo>
       <title>Spring Gemfire for .NET - Reference Documentation
       </title>
-      <releaseinfo>1.0.0 RC1
+      <releaseinfo>1.0.0 GA
       </releaseinfo>
 
         <authorgroup>
@@ -56,7 +56,7 @@
         <title>Introduction</title>
 	<partintro>
 	  <para>
-	    <para>This document is the reference guide for Spring GemFire project (SGF). It explains the relationship between Spring framework and GemFire Enterprise Fabric (GEF) 6.0.x, defines the basic concepts and semantics of the integration  and how these can be used effectively.
+	    <para>This document is the reference guide for Spring GemFire project (SGF). It explains the relationship between Spring framework and GemFire Enterprise Fabric (GEF) 6.0.x/6.5.x, defines the basic concepts and semantics of the integration  and how these can be used effectively.
 	    </para>
 	  </para>
 	</partintro>

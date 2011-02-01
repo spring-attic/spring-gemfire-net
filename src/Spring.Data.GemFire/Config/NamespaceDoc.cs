@@ -21,7 +21,7 @@
 namespace Spring.Data.GemFire.Config
 {
     /// <summary>
-    ///  This namespace contains all classes providing namespace support for the Spring GemFire project. 
+    ///  This namespace contains all classes providing Cache advice support for the Spring GemFire project. 
     /// </summary>
     internal static class NamespaceDoc
     {

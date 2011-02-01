@@ -68,7 +68,7 @@
           <!-- attribute type="SecurityTransparentAttribute" asis="true"/ -->
           <attribute type="SecurityPermissionAttribute" value="SecurityAction.RequestMinimum" asis="true"/>
           <attribute type="AssemblyCompanyAttribute" value="http://springsource.org/spring-gemfire/" />
-          <attribute type="AssemblyCopyrightAttribute" value="Copyright 2010 SpringSource." />
+          <attribute type="AssemblyCopyrightAttribute" value="Copyright 2011 SpringSource." />
           <attribute type="AssemblyTrademarkAttribute" value="Apache License, Version 2.0" />
           <attribute type="AssemblyCultureAttribute" value="" />
           <attribute type="AssemblyVersionAttribute" value="${project.version}" />

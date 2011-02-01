@@ -63,8 +63,10 @@
     <Compile Include="AllKeysInterest.cs" />
     <Compile Include="CacheFactoryObject.cs" />
     <Compile Include="Caching\GemFireCache.cs" />
+    <Compile Include="Caching\NamespaceDoc.cs" />
     <Compile Include="Config\CacheParser.cs" />
     <Compile Include="Config\ClientRegionParser.cs" />
+    <Compile Include="Config\NamespaceDoc.cs" />
     <Compile Include="Config\PoolParser.cs" />
     <Compile Include="Config\LookupRegionParser.cs" />
     <Compile Include="Config\GemfireNamespaceParser.cs" />

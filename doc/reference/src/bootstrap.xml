@@ -318,7 +318,7 @@
 
       <para>Below is a usual configuration for a client region:</para>
 
-      <programlisting language="myxml">	&lt;gfe:cache/&gt;
+      <programlisting language="myxml">&lt;gfe:cache/&gt;
 
 &lt;!-- client region declaration --&gt;
 &lt;gfe:client-region id="complex" pool-name="gemfire-pool"&gt;
@@ -342,7 +342,7 @@
       <para>The client-region can also reference multiple
       cache-listeners:</para>
 
-      <programlisting language="myxml"> 	&lt;gfe:cache/&gt;
+      <programlisting language="myxml">&lt;gfe:cache/&gt;
 
   &lt;gfe:client-region id="complex" pool-name="gemfire-pool"&gt;    
     &lt;gfe:cache-listener&gt;      

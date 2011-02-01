@@ -1,11 +1,11 @@
-THE Spring Gemfire project for .NET, Release 1.0.0 RC1 (December 22, 2010)
+THE Spring Gemfire project for .NET, Release 1.0.0 GA (February 2, 2011)
 --------------------------------------------------------------------
 http://www.springsource.org/spring-gemfire
 
 
 1. INTRODUCTION
 
-The 1.0.0 RC1 release of Spring Gemfire for .NET contains
+The 1.0.0 GA release of Spring Gemfire for .NET contains
 
      * IoC configuration of Cache, Regions, and associated CacheLoaders, CacheListener, and CacheWriters
      * Exception translation of GemFire exceptions into Spring's DAO exception hierarchy for use with Spring's

@@ -2,6 +2,17 @@ SPRING GEMFIRE FOR .NET CHANGELOG
 =================================
 http://springsource.org/spring-gemfire
 
+Release Version 1.0.0 GA February 2, 2011
+
+Release Notes - Spring Gemfire for .NET - Version 1.0.0 GA
+
+Task
+[SGFNET-19] - Update to GemFire 6.5.1
+
+Improvement
+[SGFNET-21] - If already connected to distributed system in CacheFactoryObject, disconnect and then connect again
+
+--------------------
 
 Release Version 1.0.0 RC1 December 21, 2010
 
@@ -10,7 +21,6 @@ Release Notes - Spring Gemfire for .NET - Version 1.0.0 RC1
 [SGFNET-16] - Update to Spring.NET 1.3.1
 [SGFNET-17] - Add documentation for Caching Advice
 [SGFNET-18] - Add documentation showing how to register XML namespace handler
-
 
 --------------------
 
