@@ -23,6 +23,7 @@
 using System;
 using System.Collections;
 using Common.Logging;
+using Spring.Context;
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -41,7 +42,7 @@ namespace Spring.Data.GemFire
     /// </para>
     /// </remarks>
     /// <author>Mark Pollack</author>
-    public class PoolFactoryObject : IDisposable, IFactoryObject, IInitializingObject, IObjectNameAware
+    public class PoolFactoryObject : IDisposable, IFactoryObject, IInitializingObject, IObjectNameAware, IApplicationContextAware
     {
         protected static readonly ILog log = LogManager.GetLogger(typeof (PoolFactoryObject));
 
@@ -77,6 +78,7 @@ namespace Spring.Data.GemFire
             PoolFactoryDefaults.DEFAULT_SUBSCRIPTION_MESSAGE_TRACKING_TIMEOUT;
 
         private int subscriptionRedundancy = PoolFactoryDefaults.DEFAULT_SUBSCRIPTION_REDUNDANCY;
+        private IApplicationContext applicationContext;
 
 
         public void Dispose()
@@ -113,6 +115,12 @@ namespace Spring.Data.GemFire
             {
                 AssertUtils.ArgumentHasText(objectName, "the pool name is required");
                 name = objectName;
+            }
+
+            // trigger the initilization of the cache
+            if (applicationContext != null)
+            {
+                GetObject<GemStone.GemFire.Cache.Cache>();
             }
 
             GemStone.GemFire.Cache.Pool existingPool = GemStone.GemFire.Cache.PoolManager.Find(name);
@@ -172,6 +180,16 @@ namespace Spring.Data.GemFire
 
                 pool = poolFactory.Create(name);
             }
+        }
+
+        protected T GetObject<T>()
+        {
+            string[] objectNamesForType = applicationContext.GetObjectNamesForType(typeof(T));
+            if ((objectNamesForType == null) || (objectNamesForType.Length == 0))
+            {
+                throw new NoSuchObjectDefinitionException(typeof(T).FullName, "Requested Type not Defined in the Context.");
+            }
+            return (T) applicationContext.GetObject(objectNamesForType[0]);
         }
 
         public string ObjectName
@@ -298,5 +316,13 @@ namespace Spring.Data.GemFire
         {
             set { subscriptionRedundancy = value; }
         }
+
+
+        public IApplicationContext ApplicationContext
+        {
+            set { applicationContext = value; }
+        }
+
+
     }
 }

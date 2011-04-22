@@ -2,11 +2,12 @@
 <objects xmlns="http://www.springframework.net" 
          xmlns:gfe="http://www.springframework.net/gemfire">
   
-	<gfe:cache />
-
   <gfe:pool>
     <gfe:locator host="localhost" port="40403"/>
   </gfe:pool>
+
+  <gfe:cache />
+
 
   <gfe:pool id="complex" free-connection-timeout="6000" retry-attempts="30" ping-interval="5000" subscription-enabled="true">
     <gfe:server host="localhost" port="40404"/>
