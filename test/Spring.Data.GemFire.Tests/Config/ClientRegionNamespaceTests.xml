@@ -13,7 +13,7 @@
 
   <!-- NOTE Register regex is supported only if pool subscription-enabled attribute is true, was set to false in Java -->
   <gfe:pool id="gemfire-pool" subscription-enabled="true">
-    <gfe:server host="localhost" port="40404"/>    
+    <gfe:server host="localhost" port="${port}"/>    
   </gfe:pool>
 
   <gfe:client-region id="simple" pool-name="gemfire-pool" attributes-ref="cachingProxy" />
@@ -52,6 +52,16 @@
   
   <object id="c-listener" type="Spring.Data.GemFire.Tests.SimpleCacheListener, Spring.Data.GemFire.Tests"/>
 
+  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+    <property name="VariableSources">
+      <list>
+        <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
+          <property name="SectionNames" value="GemfireConfiguration" />
+        </object>
+      </list>
+    </property>
+  </object>
 
-  
+
+
 </objects>

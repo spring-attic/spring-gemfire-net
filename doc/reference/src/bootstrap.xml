@@ -283,8 +283,9 @@
 
       <note>
         <para>If the region does not exist, an initialization exception will
-        be thrown. See the section below on how to configure GemFire
-        regions.</para>
+        be thrown. For configuring new GemFire regions proceed to the sections
+        below for client region and advanced client region
+        configuration.</para>
       </note>
 
       <para>Note that in the previous examples, since no cache name was
