@@ -4,3 +4,5 @@
 /package/
 /*.Data.GemFire.sln.cache
 /*.Net.snk
+/_UpgradeReport_Files/
+/*.user

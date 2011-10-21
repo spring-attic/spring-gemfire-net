@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using GemStone.GemFire.Cache;
 using Spring.Context;
 using Spring.Context.Support;
 
@@ -12,6 +13,7 @@ namespace Spring.Data.Gemfire.HelloWorld
     {
         private static void Main(string[] args)
         {
+            
             try
             {
                 IApplicationContext ctx = new XmlApplicationContext("ApplicationContext.xml");
