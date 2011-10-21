@@ -8,8 +8,8 @@
 	<documenters>
 		<documenter name="MSDN">
 			<property name="OutputDirectory" value=".\doc\api\target\msdn\" />
-			<property name="HtmlHelpName" value="Spring GemFire 1.0 GA" />
-			<property name="Title" value="Spring GemFire 1.0 GA API Reference" />
+			<property name="HtmlHelpName" value="Spring GemFire 1.0.2 GA" />
+			<property name="Title" value="Spring GemFire 1.0.2 GA API Reference" />
 			<property name="OutputTarget" value="HtmlHelpAndWeb" />
 			<property name="ShowVisualBasic" value="True" />
 			<property name="MergeAssemblies" value="False" />
