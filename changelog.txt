@@ -1,6 +1,6 @@
 SPRING GEMFIRE FOR .NET CHANGELOG
 =================================
-http://springsource.org/spring-gemfire
+https://springsource.org/spring-gemfire
 
 Release Version 1.0.0 GA February 2, 2011
 

@@ -18,7 +18,7 @@ using System.Security.Permissions;
 [assembly: ComVisibleAttribute(false)]
 [assembly: AllowPartiallyTrustedCallersAttribute()]
 [assembly: SecurityPermissionAttribute(SecurityAction.RequestMinimum)]
-[assembly: AssemblyCompanyAttribute("http://springsource.org/spring-gemfire/")]
+[assembly: AssemblyCompanyAttribute("https://springsource.org/spring-gemfire/")]
 [assembly: AssemblyCopyrightAttribute("Copyright 2011 SpringSource.")]
 [assembly: AssemblyTrademarkAttribute("Apache License, Version 2.0")]
 [assembly: AssemblyCultureAttribute("")]

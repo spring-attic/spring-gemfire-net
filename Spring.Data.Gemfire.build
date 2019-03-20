@@ -67,7 +67,7 @@
           <attribute type="AllowPartiallyTrustedCallersAttribute" asis="true"/>
           <!-- attribute type="SecurityTransparentAttribute" asis="true"/ -->
           <attribute type="SecurityPermissionAttribute" value="SecurityAction.RequestMinimum" asis="true"/>
-          <attribute type="AssemblyCompanyAttribute" value="http://springsource.org/spring-gemfire/" />
+          <attribute type="AssemblyCompanyAttribute" value="https://springsource.org/spring-gemfire/" />
           <attribute type="AssemblyCopyrightAttribute" value="Copyright 2011 SpringSource." />
           <attribute type="AssemblyTrademarkAttribute" value="Apache License, Version 2.0" />
           <attribute type="AssemblyCultureAttribute" value="" />

@@ -1,6 +1,6 @@
 THE Spring Gemfire project for .NET, Release 1.0.0 GA (February 2, 2011)
 --------------------------------------------------------------------
-http://www.springsource.org/spring-gemfire
+https://www.springsource.org/spring-gemfire
 
 
 1. INTRODUCTION
@@ -37,7 +37,7 @@ debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly fla
 
 The VS.NET solution for the framework and examples are provided.
 
-Latest info is available at the public website: http://www.springsource.org/spring-gemfire
+Latest info is available at the public website: https://www.springsource.org/spring-gemfire
 
 Spring Gemfire for .NET is released under the terms of the Apache Software License (see license.txt).
 
@@ -67,7 +67,7 @@ The is a solution file for different version of VS.NET
 
 8. Support
 
-The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests,
+The user forums at https://forum.springframework.net/ are available for you to submit questions, support requests,
 and interact with other Spring.NET users.
 
 Bug and issue tracking can be found at https://jira.springframework.org/browse/SGFNET
