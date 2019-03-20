@@ -25,7 +25,7 @@ namespace Spring.Data.GemFire.Config
     /// </summary>
     internal static class NamespaceDoc
     {
-        // serves as namespace summary for NDoc3 (http://ndoc3.sourceforge.net)
+        // serves as namespace summary for NDoc3 (https://apps.sourceforge.net/mediawiki/ndoc3/index.php?title=Main_Page)
     }
 
 }
