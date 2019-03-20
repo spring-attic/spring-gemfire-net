@@ -4,7 +4,7 @@
      Configures a server to for clients at port 40404.
 -->
 
-<!DOCTYPE cache PUBLIC "-//GemStone Systems, Inc.//GemFire Declarative Cache 6.0//EN" "http://www.gemstone.com/dtd/cache6_0.dtd">
+<!DOCTYPE cache PUBLIC "-//GemStone Systems, Inc.//GemFire Declarative Cache 6.0//EN" "https://www.gemstone.com/dtd/cache6_0.dtd">
 <cache>
   <cache-server port="40404"/>
   

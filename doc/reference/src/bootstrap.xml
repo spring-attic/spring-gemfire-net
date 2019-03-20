@@ -10,7 +10,7 @@
   <para>One of the first tasks when using GemFire and Spring is to configure
   the data grid using dependency injection via the Spring container. While
   this is <ulink
-  url="http://community.gemstone.com/display/gemfire/Integrating+GemFire+with+the+Spring+IoC+Container">possible</ulink>
+  url="https://community.gemstone.com/display/gemfire/Integrating+GemFire+with+the+Spring+IoC+Container">possible</ulink>
   out of the box, the configuration tends to be verbose and only address basic
   cases. To address this problem, the Spring GemFire project provides several
   classes that enable the configuration of distributed caches or regions to
@@ -255,9 +255,9 @@
     <para>For more information about the various region types and their
     capabilities as well as configuration options, please refer to the GemFire
     Developer's <ulink
-    url="http://www.gemstone.com/documentation">Guide</ulink> and community
+    url="https://www.gemstone.com/documentation">Guide</ulink> and community
     <ulink
-    url="http://community.gemstone.com/display/gemfire/GemFire+Enterprise">site</ulink>.</para>
+    url="https://community.gemstone.com/display/gemfire/GemFire+Enterprise">site</ulink>.</para>
 
     <section>
       <title>Using an externally configured

@@ -17,7 +17,7 @@
     <title>Prerequisites</title>
 
     <para>1. You will need to <ulink
-    url="http://download.gemstone.com/">download</ulink>, install, and obtain
+    url="https://download.gemstone.com/">download</ulink>, install, and obtain
     a license for</para>
 
     <itemizedlist>
@@ -84,7 +84,7 @@
     download the GemFire Enterprise Native Client 3.0.0.9 from the download
     site to have access to reference documentation. You may also find the
     <ulink
-    url="http://community.gemstone.com/display/gemfire/GemFire+.NET+API+Tour">GemFire
+    url="https://community.gemstone.com/display/gemfire/GemFire+.NET+API+Tour">GemFire
     .NET API Tour</ulink> of interest to read.</para>
   </section>
 
