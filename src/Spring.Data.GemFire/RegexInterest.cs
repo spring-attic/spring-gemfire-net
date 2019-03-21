@@ -7,7 +7,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -60,7 +60,7 @@ namespace Spring.Data.GemFire
         /// <remarks>
         /// The client can register any of its interest lists and continuous queries as durable. 
         /// Durable interest remains even if the client disconnects for a period of time. 
-        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// During the clientï¿½s down time, the server maintains its durable subscriptions and then, 
         /// when the client reconnects, plays them back to the client.
         /// </remarks>
         public RegexInterest(string regex, bool durable)
@@ -87,7 +87,7 @@ namespace Spring.Data.GemFire
         /// <remarks>
         /// The client can register any of its interest lists and continuous queries as durable. 
         /// Durable interest remains even if the client disconnects for a period of time. 
-        /// During the client’s down time, the server maintains its durable subscriptions and then, 
+        /// During the clientï¿½s down time, the server maintains its durable subscriptions and then, 
         /// when the client reconnects, plays them back to the client.
         /// </remarks>
         public RegexInterest(string regex, InterestResultPolicy policy, bool durable)
