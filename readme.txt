@@ -1,3 +1,6 @@
+# spring-gemfire-net is no longer actively maintained by VMware, Inc.
+
+
 THE Spring Gemfire project for .NET, Release 1.0.0 GA (February 2, 2011)
 --------------------------------------------------------------------
 http://www.springsource.org/spring-gemfire
